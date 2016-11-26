@@ -1,0 +1,16 @@
+.graph-line {
+    height: 2px;
+    margin: 0;
+    position: absolute;
+}
+
+.graph-line .graph-line-inner {
+    background-color: #79E0FF;
+    height: 100%;
+    /*width: 0;*/
+    width: 100%;
+}
+
+.graph-line.active .graph-line-inner {
+    width: 100%;
+}

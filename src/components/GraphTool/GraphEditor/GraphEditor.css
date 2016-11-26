@@ -1,0 +1,22 @@
+#graph-editor {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 90%;
+    height: 50%;
+    border-bottom: 1px solid #555;
+}
+
+#graph-editor h1 {
+    background-color: #ccc;
+    color: #777;
+}
+
+#graph-editor-panel {
+    height: 100%;
+    margin-left: 20px;
+    z-index: 4;
+    background-color: #eee;
+    position: relative;
+    cursor: crosshair;
+}

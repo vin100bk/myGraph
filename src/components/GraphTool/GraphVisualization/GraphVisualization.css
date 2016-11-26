@@ -1,0 +1,17 @@
+#graph-visualization {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 90%;
+    height: 50%;
+}
+
+#graph-visualization h1 {
+    color: #888;
+}
+
+#graph-visualization-panel {
+    margin-left: 20px;
+    height: 100%;
+    position: relative;
+}

@@ -1,0 +1,26 @@
+.graph-dot {
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    transition: opacity .2s, transform .2s;
+
+    /*opacity: 0;
+    transform: scale(0.5);*/
+}
+
+.graph-dot:before {
+    background-color: #79E0FF;
+    border-radius: 50%;
+    content: "";
+    width: 8px;
+    height: 8px;
+    margin: -4px 0 0 -4px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+.graph-dot.active {
+    opacity: 1;
+    transform: scale(1);
+}
