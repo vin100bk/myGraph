@@ -12,7 +12,9 @@ import GraphToolBar from './GraphToolBar/GraphToolBar';
 class GraphTool extends Component {
     constructor(props) {
         super(props);
+
         this.handleAddPoint = this.handleAddPoint.bind(this);
+        this.handleDeletePoint = this.handleDeletePoint.bind(this);
 
         this.state = {points: this.props.points, links: this.computeLinksInfos(this.props.links, this.props.points)};
     }
@@ -24,10 +26,36 @@ class GraphTool extends Component {
      */
     handleAddPoint(x, y) {
         this.setState((prevState, props) => {
-            prevState.points[this.getNextPointName(prevState.points)] = {x: x, y: y};
+            const name = this.getNextPointName(prevState.points);
+            prevState.points[name] = {name: name, x: x, y: y};
 
             return {points: prevState.points, links: prevState.links};
-        })
+        });
+    }
+
+    /**
+     * Delete a point
+     * @param point
+     */
+    handleDeletePoint(point) {
+        this.setState((prevState, props) => {
+            const pointName = point.props.point.name;
+
+            // Delete the point
+            delete prevState.points[pointName];
+
+            // Delete the links
+            let i = 0;
+            prevState.links.forEach(function (link) {
+                if(parseInt(link.from, 10) === pointName || parseInt(link.to, 10) === pointName) {
+                    delete prevState.links[i];
+                }
+
+                i++;
+            });
+
+            return prevState;
+        });
     }
 
     /**
@@ -82,15 +110,12 @@ class GraphTool extends Component {
         }
     }
 
-    /**
-     * Render
-     * @returns {XML}
-     */
     render() {
         return (
             <section id="graph-tool">
                 <GraphToolBar />
-                <GraphEditor onAddPoint={this.handleAddPoint} points={this.state.points} links={this.state.links}/>
+                <GraphEditor onAddPoint={this.handleAddPoint} onDeletePoint={this.handleDeletePoint}
+                             points={this.state.points} links={this.state.links}/>
                 <GraphVisualization points={this.state.points} links={this.state.links}/>
             </section>
         );

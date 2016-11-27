@@ -4,6 +4,7 @@
     right: 0;
     width: 90%;
     height: 50%;
+    z-index: 5;
 }
 
 #graph-visualization h1 {

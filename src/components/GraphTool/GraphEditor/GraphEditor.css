@@ -5,6 +5,7 @@
     width: 90%;
     height: 50%;
     border-bottom: 1px solid #555;
+    z-index: 5;
 }
 
 #graph-editor h1 {
@@ -19,4 +20,8 @@
     background-color: #eee;
     position: relative;
     cursor: crosshair;
+}
+
+#graph-editor-panel.point-selected {
+    cursor: not-allowed;
 }

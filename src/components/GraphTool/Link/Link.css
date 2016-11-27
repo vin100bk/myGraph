@@ -2,6 +2,7 @@
     height: 2px;
     margin: 0;
     position: absolute;
+    z-index: 8;
 }
 
 .graph-line .graph-line-inner {
