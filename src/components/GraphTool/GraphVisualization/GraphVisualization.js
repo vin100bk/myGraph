@@ -7,7 +7,7 @@ import Link from '../Link/Link';
 
 class GraphVisualization extends Component {
     render() {
-        var children = [];
+        let children = [];
         // Points
         for (const name of Object.keys(this.props.points)) {
             let point = this.props.points[name];

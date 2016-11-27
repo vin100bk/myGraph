@@ -15,6 +15,7 @@ class GraphTool extends Component {
 
         this.handleAddPoint = this.handleAddPoint.bind(this);
         this.handleDeletePoint = this.handleDeletePoint.bind(this);
+        this.handleAddLink = this.handleAddLink.bind(this);
 
         this.state = {points: this.props.points, links: this.computeLinksInfos(this.props.links, this.props.points)};
     }
@@ -47,13 +48,23 @@ class GraphTool extends Component {
             // Delete the links
             let i = 0;
             prevState.links.forEach(function (link) {
-                if(parseInt(link.from, 10) === pointName || parseInt(link.to, 10) === pointName) {
+                if (parseInt(link.from, 10) === pointName || parseInt(link.to, 10) === pointName) {
                     delete prevState.links[i];
                 }
 
                 i++;
             });
 
+            return prevState;
+        });
+    }
+
+    handleAddLink(from, to) {
+        this.setState((prevState, props) => {
+            prevState.links.push(this.computeLinkInfos({
+                from: from.props.point.name,
+                to: to.props.point.name
+            }, prevState.points));
             return prevState;
         });
     }
@@ -90,7 +101,7 @@ class GraphTool extends Component {
 
         link.angle = Math.atan((to.y - from.y) / (to.x - from.x));
         link.width = Math.sqrt(Math.pow(to.x - from.x, 2) + Math.pow(to.y - from.y, 2));
-        link.x = from.x - ((link.width / 2) - (Math.cos(link.angle) * (link.width / 2))) + 9;
+        link.x = Math.min(from.x, to.x) - ((link.width / 2) - (Math.cos(link.angle) * (link.width / 2))) + 9;
         link.y = (from.y + to.y) / 2 + 9;
 
         return link;
@@ -115,7 +126,7 @@ class GraphTool extends Component {
             <section id="graph-tool">
                 <GraphToolBar />
                 <GraphEditor onAddPoint={this.handleAddPoint} onDeletePoint={this.handleDeletePoint}
-                             points={this.state.points} links={this.state.links}/>
+                             onAddLink={this.handleAddLink} points={this.state.points} links={this.state.links}/>
                 <GraphVisualization points={this.state.points} links={this.state.links}/>
             </section>
         );

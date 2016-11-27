@@ -13,8 +13,18 @@ class GraphEditor extends Component {
 
         this.handleClick = this.handleClick.bind(this);
         this.handleClickPoint = this.handleClickPoint.bind(this);
-        this.handleEscape = this.handleEscape.bind(this);
-        this.handleDeletePoint = this.handleDeletePoint.bind(this);
+
+        document.onkeyup = function (event) {
+            if (this.state.pointSelected) {
+                if (event.keyCode === 27) {
+                    // Escape
+                    this.handleEscape();
+                } else if (event.keyCode === 8) {
+                    // Delete
+                    this.handleDeletePoint(this.state.pointSelected);
+                }
+            }
+        }.bind(this);
     }
 
     /**
@@ -36,17 +46,27 @@ class GraphEditor extends Component {
      */
     handleClickPoint(point) {
         if (this.state.pointSelected) {
-            this.state.pointSelected.setState({isSelected: false});
+            // A point is already selected
+            this.props.onAddLink(this.state.pointSelected, point);
+            this.handleEscape();
+        } else {
+            // No point selected
+            point.setState({isSelected: true});
+            this.setState({pointSelected: point});
         }
-
-        this.setState({pointSelected: point});
     }
 
     /**
      * On press on the escape key
      */
     handleEscape() {
-        this.setState({pointSelected: null});
+        this.setState((prevState, props) => {
+            if (prevState.pointSelected) {
+                prevState.pointSelected.setState({isSelected: false});
+            }
+
+            return {pointSelected: null};
+        });
     }
 
     /**
@@ -59,12 +79,11 @@ class GraphEditor extends Component {
     }
 
     render() {
-        var children = [];
+        let children = [];
         // Points
         for (const name of Object.keys(this.props.points)) {
             let point = this.props.points[name];
-            children.push(<Point key={name} point={point} onClick={this.handleClickPoint}
-                                 onEscape={this.handleEscape} onDelete={this.handleDeletePoint}/>);
+            children.push(<Point key={name} point={point} onClick={this.handleClickPoint}/>);
         }
 
         // Links

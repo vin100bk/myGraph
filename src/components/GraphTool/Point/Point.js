@@ -16,18 +16,7 @@ class Point extends Component {
      */
     handleClick(e) {
         e.stopPropagation();
-        this.setState({isSelected: true});
         this.props.onClick(this);
-
-        document.onkeyup = function (event) {
-            if(event.keyCode === 27) {
-                // Escape
-                this.setState({isSelected: false});
-                this.props.onEscape();
-            } else if(event.keyCode === 8) {
-                this.props.onDelete(this);
-            }
-        }.bind(this);
     }
 
     render() {
