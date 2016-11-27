@@ -15,10 +15,10 @@ class GraphVisualization extends Component {
         }
 
         // Links
-        this.props.links.forEach(function (link) {
-            let linkKey = link.from + '-' + link.to;
-            children.push(<Link key={linkKey} link={link}/>);
-        });
+        for (const name of Object.keys(this.props.links)) {
+            let link = this.props.links[name];
+            children.push(<Link key={name} link={link}/>);
+        }
 
         return (
             <section id="graph-visualization">

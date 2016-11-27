@@ -47,8 +47,11 @@ class GraphEditor extends Component {
     handleClickPoint(point) {
         if (this.state.pointSelected) {
             // A point is already selected
-            this.props.onAddLink(this.state.pointSelected, point);
-            this.handleEscape();
+            try {
+                this.props.onAddLink(this.state.pointSelected, point);
+                this.handleEscape();
+            } catch (e) {
+            }
         } else {
             // No point selected
             point.setState({isSelected: true});
@@ -87,10 +90,10 @@ class GraphEditor extends Component {
         }
 
         // Links
-        this.props.links.forEach(function (link) {
-            let linkKey = link.from + '-' + link.to;
-            children.push(<Link key={linkKey} link={link}/>);
-        });
+        for (const name of Object.keys(this.props.links)) {
+            let link = this.props.links[name];
+            children.push(<Link key={name} link={link}/>);
+        }
 
         return (
             <section id="graph-editor">

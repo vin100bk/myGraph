@@ -46,25 +46,37 @@ class GraphTool extends Component {
             delete prevState.points[pointName];
 
             // Delete the links
-            let i = 0;
-            prevState.links.forEach(function (link) {
-                if (parseInt(link.from, 10) === pointName || parseInt(link.to, 10) === pointName) {
-                    delete prevState.links[i];
-                }
+            for (const name of Object.keys(prevState.links)) {
+                let link = this.props.links[name];
 
-                i++;
-            });
+                if (parseInt(link.from, 10) === pointName || parseInt(link.to, 10) === pointName) {
+                    delete prevState.links[name];
+                }
+            }
 
             return prevState;
         });
     }
 
+    /**
+     * Add a link
+     * @param from
+     * @param to
+     */
     handleAddLink(from, to) {
+        if (from.props.point.name === to.props.point.name) {
+            throw new Error('Cannot insert a link between a same point');
+        }
+
+        if ((from.props.point.name + '-' + to.props.point.name) in this.state.links || (to.props.point.name + '-' + from.props.point.name) in this.state.links) {
+            throw new Error('There can be only one link between two points');
+        }
+
         this.setState((prevState, props) => {
-            prevState.links.push(this.computeLinkInfos({
+            prevState.links[from.props.point.name + '-' + to.props.point.name] = this.computeLinkInfos({
                 from: from.props.point.name,
                 to: to.props.point.name
-            }, prevState.points));
+            }, prevState.points);
             return prevState;
         });
     }
@@ -75,12 +87,11 @@ class GraphTool extends Component {
      * @param points
      */
     computeLinksInfos(links, points) {
-        let computedLinks = [];
-        links.forEach(function (link) {
-            computedLinks.push(this.computeLinkInfos(link, points));
-        }, this);
+        for (const name of Object.keys(links)) {
+            links[name] = this.computeLinkInfos(links[name], points);
+        }
 
-        return computedLinks;
+        return links;
     }
 
     /**
