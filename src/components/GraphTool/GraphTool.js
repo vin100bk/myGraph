@@ -17,6 +17,7 @@ class GraphTool extends Component {
         this.handleDeletePoint = this.handleDeletePoint.bind(this);
         this.handleAddLink = this.handleAddLink.bind(this);
         this.handleDeleteLink = this.handleDeleteLink.bind(this);
+        this.handleNewGraph = this.handleNewGraph.bind(this);
 
         this.state = {points: this.props.points, links: this.computeLinksInfos(this.props.links, this.props.points)};
     }
@@ -98,6 +99,13 @@ class GraphTool extends Component {
     }
 
     /**
+     * Create a new graph
+     */
+    handleNewGraph() {
+        this.setState({points: {}, links: {}});
+    }
+
+    /**
      * Compute information for all links
      * @param links
      * @param points
@@ -140,7 +148,7 @@ class GraphTool extends Component {
      * @returns {*}
      */
     getNextPointName(points) {
-        if (points.length === 0) {
+        if (Object.keys(points).length === 0) {
             return 1;
         } else {
             const keys = Object.keys(points);
@@ -151,7 +159,7 @@ class GraphTool extends Component {
     render() {
         return (
             <section id="graph-tool">
-                <GraphToolBar />
+                <GraphToolBar onNewGraph={this.handleNewGraph}/>
                 <GraphEditor onAddPoint={this.handleAddPoint} onDeletePoint={this.handleDeletePoint}
                              onAddLink={this.handleAddLink} onDeleteLink={this.handleDeleteLink}
                              points={this.state.points} links={this.state.links}/>
