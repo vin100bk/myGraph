@@ -16,6 +16,7 @@ class GraphTool extends Component {
         this.handleAddPoint = this.handleAddPoint.bind(this);
         this.handleDeletePoint = this.handleDeletePoint.bind(this);
         this.handleAddLink = this.handleAddLink.bind(this);
+        this.handleDeleteLink = this.handleDeleteLink.bind(this);
 
         this.state = {points: this.props.points, links: this.computeLinksInfos(this.props.links, this.props.points)};
     }
@@ -82,6 +83,21 @@ class GraphTool extends Component {
     }
 
     /**
+     * On delete a link
+     * @param link
+     */
+    handleDeleteLink(link) {
+        this.setState((prevState, props) => {
+            const linkName = link.props.link.from + '-' + link.props.link.to;
+
+            // Delete the link
+            delete prevState.links[linkName];
+
+            return prevState;
+        });
+    }
+
+    /**
      * Compute information for all links
      * @param links
      * @param points
@@ -137,7 +153,8 @@ class GraphTool extends Component {
             <section id="graph-tool">
                 <GraphToolBar />
                 <GraphEditor onAddPoint={this.handleAddPoint} onDeletePoint={this.handleDeletePoint}
-                             onAddLink={this.handleAddLink} points={this.state.points} links={this.state.links}/>
+                             onAddLink={this.handleAddLink} onDeleteLink={this.handleDeleteLink}
+                             points={this.state.points} links={this.state.links}/>
                 <GraphVisualization points={this.state.points} links={this.state.links}/>
             </section>
         );

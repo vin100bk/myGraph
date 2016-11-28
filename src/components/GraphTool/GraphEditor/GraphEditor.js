@@ -16,13 +16,15 @@ class GraphEditor extends Component {
         this.handleClickLink = this.handleClickLink.bind(this);
 
         document.onkeyup = function (event) {
-            if (this.state.pointSelected) {
-                if (event.keyCode === 27) {
-                    // Escape
-                    this.handleEscape();
-                } else if (event.keyCode === 8) {
-                    // Delete
+            if (event.keyCode === 27) {
+                // Escape
+                this.handleEscape();
+            } else if (event.keyCode === 8) {
+                // Delete
+                if (this.state.pointSelected) {
                     this.handleDeletePoint(this.state.pointSelected);
+                } else if(this.state.linkSelected) {
+                    this.handleDeleteLink(this.state.linkSelected);
                 }
             }
         }.bind(this);
@@ -99,7 +101,16 @@ class GraphEditor extends Component {
      */
     handleDeletePoint(point) {
         this.props.onDeletePoint(point);
-        this.handleEscape();
+        this.setState({pointSelected: null, linkSelected: null});
+    }
+
+    /**
+     * On delete a link
+     * @param link
+     */
+    handleDeleteLink(link) {
+        this.props.onDeleteLink(link);
+        this.setState({pointSelected: null, linkSelected: null});
     }
 
     render() {
