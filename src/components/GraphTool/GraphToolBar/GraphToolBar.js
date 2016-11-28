@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
+
 import './GraphToolBar.css';
+
+import GraphOptions from '../GraphOptions/GraphOptions';
+import GraphButtons from '../GraphButtons/GraphButtons';
 
 class GraphToolBar extends Component {
     render() {
         return (
-            <div id="graph-toolbar" />
+            <section id="graph-toolbar">
+                <GraphOptions />
+                <GraphButtons />
+            </section>
         );
     }
 }

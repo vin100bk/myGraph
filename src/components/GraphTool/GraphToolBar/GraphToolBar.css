@@ -2,7 +2,16 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 10%;
+    width: 15%;
     height: 100%;
     border-right: 1px solid #000;
+}
+
+#graph-toolbar .graph-options, #graph-toolbar .graph-buttons {
+    position: absolute;
+    width: 100%;
+}
+
+#graph-toolbar .graph-buttons {
+    bottom: 0;
 }

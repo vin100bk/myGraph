@@ -1,0 +1,17 @@
+.graph-button {
+    display: block;
+    text-decoration: none;
+    padding: 5px;
+    font-size: 1rem;
+    background-color: #555;
+    color: #fff;
+    margin: 0 5px 10px;
+}
+
+.graph-button:hover {
+    background-color: #000;
+}
+
+.graph-button .fa {
+    margin-right: 10px;
+}
