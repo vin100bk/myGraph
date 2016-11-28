@@ -9,10 +9,11 @@ class GraphEditor extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {pointSelected: null};
+        this.state = {pointSelected: null, linkSelected: null};
 
         this.handleClick = this.handleClick.bind(this);
         this.handleClickPoint = this.handleClickPoint.bind(this);
+        this.handleClickLink = this.handleClickLink.bind(this);
 
         document.onkeyup = function (event) {
             if (this.state.pointSelected) {
@@ -54,9 +55,26 @@ class GraphEditor extends Component {
             }
         } else {
             // No point selected
+            this.handleEscape();
             point.setState({isSelected: true});
-            this.setState({pointSelected: point});
+            this.setState((prevState, props) => {
+                prevState.pointSelected = point;
+                return prevState;
+            });
         }
+    }
+
+    /**
+     * On click on a link
+     * @param point
+     */
+    handleClickLink(link) {
+        this.handleEscape();
+        link.setState({isSelected: true});
+        this.setState((prevState, props) => {
+            prevState.linkSelected = link;
+            return prevState;
+        });
     }
 
     /**
@@ -67,8 +85,11 @@ class GraphEditor extends Component {
             if (prevState.pointSelected) {
                 prevState.pointSelected.setState({isSelected: false});
             }
+            if (prevState.linkSelected) {
+                prevState.linkSelected.setState({isSelected: false});
+            }
 
-            return {pointSelected: null};
+            return {pointSelected: null, linkSelected: null};
         });
     }
 
@@ -92,7 +113,7 @@ class GraphEditor extends Component {
         // Links
         for (const name of Object.keys(this.props.links)) {
             let link = this.props.links[name];
-            children.push(<Link key={name} link={link}/>);
+            children.push(<Link key={name} link={link} onClick={this.handleClickLink}/>);
         }
 
         return (
