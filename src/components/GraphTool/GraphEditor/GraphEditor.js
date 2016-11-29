@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import './GraphEditor.css';
 
-import Point from '../Point/Point';
+import CoordPoint from '../CoordPoint/CoordPoint';
 import Link from '../Link/Link';
 
 class GraphEditor extends Component {
@@ -15,8 +15,6 @@ class GraphEditor extends Component {
         this.handleClickPoint = this.handleClickPoint.bind(this);
         this.handleClickLink = this.handleClickLink.bind(this);
         this.handleMouseMove = this.handleMouseMove.bind(this);
-        this.handleHoverPoint = this.handleHoverPoint.bind(this);
-        this.handleOutPoint = this.handleOutPoint.bind(this);
 
         document.onkeyup = function (event) {
             if (event.keyCode === 27) {
@@ -60,24 +58,6 @@ class GraphEditor extends Component {
 
         for (let i = 0; i < yLines.length; i++) {
             yLines[i].style.visibility = 'visible';
-        }
-    }
-
-    /**
-     * When hover a point
-     * @param e
-     */
-    handleHoverPoint(e) {
-        let lines = document.getElementsByClassName('graph-dot-coordinates');
-        for (let i = 0; i < lines.length; i++) {
-            lines[i].style.display = 'none';
-        }
-    }
-
-    handleOutPoint(e) {
-        let lines = document.getElementsByClassName('graph-dot-coordinates');
-        for (let i = 0; i < lines.length; i++) {
-            lines[i].style.display = 'block';
         }
     }
 
@@ -168,7 +148,7 @@ class GraphEditor extends Component {
         // Points
         for (const name of Object.keys(this.props.points)) {
             let point = this.props.points[name];
-            children.push(<Point key={name} point={point} onClick={this.handleClickPoint}
+            children.push(<CoordPoint key={name} point={point} onClick={this.handleClickPoint}
                                  onMouseOver={this.handleHoverPoint} onMouseOut={this.handleOutPoint}/>);
         }
 

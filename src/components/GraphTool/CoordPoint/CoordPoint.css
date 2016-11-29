@@ -1,0 +1,25 @@
+/*
+ * Coordinates
+ */
+.graph-dot-coordinates {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    background-color: #000;
+    visibility: hidden;
+}
+
+.graph-dot-coordinates-x {
+    height: 1px;
+}
+
+.graph-dot-coordinates-y {
+    width: 1px;
+}
+
+#graph-editor-panel.point-selected .graph-dot-coordinates {
+    display: none;
+}
