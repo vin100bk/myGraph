@@ -14,6 +14,9 @@ class GraphEditor extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.handleClickPoint = this.handleClickPoint.bind(this);
         this.handleClickLink = this.handleClickLink.bind(this);
+        this.handleMouseMove = this.handleMouseMove.bind(this);
+        this.handleHoverPoint = this.handleHoverPoint.bind(this);
+        this.handleOutPoint = this.handleOutPoint.bind(this);
 
         document.onkeyup = function (event) {
             if (event.keyCode === 27) {
@@ -23,11 +26,59 @@ class GraphEditor extends Component {
                 // Delete
                 if (this.state.pointSelected) {
                     this.handleDeletePoint(this.state.pointSelected);
-                } else if(this.state.linkSelected) {
+                } else if (this.state.linkSelected) {
                     this.handleDeleteLink(this.state.linkSelected);
                 }
             }
         }.bind(this);
+    }
+
+    /**
+     * When the component is mount
+     */
+    componentDidMount() {
+        // Store it, avoid to compute it at each mouse move
+        this.coordinatesPanel = document.getElementById('graph-editor-panel').getBoundingClientRect();
+    }
+
+    /**
+     * When the mouse moves in the editor
+     * @param e
+     */
+    handleMouseMove(e) {
+        let lines = document.getElementsByClassName('graph-dot-coordinates');
+        for (let i = 0; i < lines.length; i++) {
+            lines[i].style.visibility = 'hidden';
+        }
+
+        let xLines = document.getElementsByClassName('graph-dot-coordinates-x-' + Math.round(e.pageY) + 'px');
+        let yLines = document.getElementsByClassName('graph-dot-coordinates-y-' + Math.round(e.pageX - this.coordinatesPanel.left) + 'px');
+
+        for (let i = 0; i < xLines.length; i++) {
+            xLines[i].style.visibility = 'visible';
+        }
+
+        for (let i = 0; i < yLines.length; i++) {
+            yLines[i].style.visibility = 'visible';
+        }
+    }
+
+    /**
+     * When hover a point
+     * @param e
+     */
+    handleHoverPoint(e) {
+        let lines = document.getElementsByClassName('graph-dot-coordinates');
+        for (let i = 0; i < lines.length; i++) {
+            lines[i].style.display = 'none';
+        }
+    }
+
+    handleOutPoint(e) {
+        let lines = document.getElementsByClassName('graph-dot-coordinates');
+        for (let i = 0; i < lines.length; i++) {
+            lines[i].style.display = 'block';
+        }
     }
 
     /**
@@ -36,9 +87,8 @@ class GraphEditor extends Component {
      */
     handleClick(e) {
         if (this.state.pointSelected === null) {
-            const coordinatesParent = document.getElementById('graph-editor-panel').getBoundingClientRect();
-            const x = e.pageX - coordinatesParent.left - 9;
-            const y = e.pageY - coordinatesParent.top - 9;
+            const x = e.pageX - this.coordinatesPanel.left - 9;
+            const y = e.pageY - this.coordinatesPanel.top - 9;
             this.props.onAddPoint(x, y);
         }
     }
@@ -118,7 +168,8 @@ class GraphEditor extends Component {
         // Points
         for (const name of Object.keys(this.props.points)) {
             let point = this.props.points[name];
-            children.push(<Point key={name} point={point} onClick={this.handleClickPoint}/>);
+            children.push(<Point key={name} point={point} onClick={this.handleClickPoint}
+                                 onMouseOver={this.handleHoverPoint} onMouseOut={this.handleOutPoint}/>);
         }
 
         // Links
@@ -132,7 +183,7 @@ class GraphEditor extends Component {
                 <h1>Graph editor</h1>
 
                 <div id="graph-editor-panel" className={this.state.pointSelected ? 'point-selected' : ''}
-                     onClick={this.handleClick}>
+                     onClick={this.handleClick} onMouseMove={this.handleMouseMove}>
                     {children}
                 </div>
             </section>
