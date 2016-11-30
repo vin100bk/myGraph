@@ -1,5 +1,4 @@
 .graph-history {
-    margin-top: 5px;
     border-bottom: 1px solid #356;
     background-color: #efefef;
     font-size: 0.7rem;
@@ -24,6 +23,8 @@
     list-style-type: none;
     margin: 0 0 5px;
     padding: 0;
+    max-height: 250px;
+    overflow: auto;
 }
 
 .graph-history ul li {
@@ -44,6 +45,7 @@
 
 .graph-history ul li h2 {
     margin: 0 0 5px;
+    font-size: 0.9rem;
 }
 
 .graph-history ul li > span {
