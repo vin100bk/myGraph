@@ -6,24 +6,16 @@ import GraphOptions from '../GraphOptions/GraphOptions';
 import GraphButtons from '../GraphButtons/GraphButtons';
 
 class GraphToolBar extends Component {
-    constructor(props) {
-        super(props);
-
-        this.handleNewGraph = this.handleNewGraph.bind(this);
-    }
-
-    /**
-     * Create a new graph
-     */
-    handleNewGraph() {
-        this.props.onNewGraph();
-    }
-
     render() {
         return (
             <section id="graph-toolbar">
-                <GraphOptions />
-                <GraphButtons onNewGraph={this.handleNewGraph}/>
+                <GraphOptions history={this.props.history} currentHistoryRow={this.props.currentHistoryRow}
+                              onClickHistoryRow={this.props.onClickHistoryRow}
+                              onRenameHistoryRow={this.props.onRenameHistoryRow}
+                              onDeleteHistoryRow={this.props.onDeleteHistoryRow}/>
+
+                <GraphButtons currentHistoryRow={this.props.currentHistoryRow} onNewGraph={this.props.onNewGraph}
+                              onCopyGraph={this.props.onCopyGraph}/>
             </section>
         );
     }

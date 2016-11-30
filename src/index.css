@@ -9,3 +9,14 @@ body {
     color: #000;
     font-size: 12px;
 }
+
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.none {
+    font-style: italic;
+    text-align: center;
+}

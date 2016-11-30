@@ -11,6 +11,7 @@ class GraphButtons extends Component {
         super(props);
 
         this.handleNew = this.handleNew.bind(this);
+        this.handleCopy = this.handleCopy.bind(this);
         this.handleSavePicture = this.handleSavePicture.bind(this);
     }
 
@@ -20,6 +21,15 @@ class GraphButtons extends Component {
     handleNew(e) {
         e.preventDefault();
         this.props.onNewGraph();
+    }
+
+    /**
+     * Create a new graph from the current one
+     * @param e
+     */
+    handleCopy(e) {
+        e.preventDefault();
+        this.props.onCopyGraph();
     }
 
     /**
@@ -41,6 +51,13 @@ class GraphButtons extends Component {
                     <i className="fa fa-file-o" aria-hidden="true"></i>
                     New graph
                 </GraphButton>
+
+                {this.props.currentHistoryRow &&
+                <GraphButton onClick={this.handleCopy}>
+                    <i className="fa fa-files-o" aria-hidden="true"></i>
+                    Copy graph
+                </GraphButton>
+                }
 
                 <GraphButton onClick={this.handleSavePicture}>
                     <i className="fa fa-file-image-o" aria-hidden="true"></i>

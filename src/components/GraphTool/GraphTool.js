@@ -18,8 +18,24 @@ class GraphTool extends Component {
         this.handleAddLink = this.handleAddLink.bind(this);
         this.handleDeleteLink = this.handleDeleteLink.bind(this);
         this.handleNewGraph = this.handleNewGraph.bind(this);
+        this.handleCopyGraph = this.handleCopyGraph.bind(this);
+        this.handleLoadHistory = this.handleLoadHistory.bind(this);
+        this.handleRenameHistory = this.handleRenameHistory.bind(this);
+        this.handleDeleteHistory = this.handleDeleteHistory.bind(this);
 
-        this.state = {points: this.props.points, links: this.computeLinksInfos(this.props.links, this.props.points)};
+        let hist = localStorage.getItem('history');
+        if (hist) {
+            hist = JSON.parse(hist);
+        } else {
+            hist = {};
+        }
+
+        this.state = {
+            points: this.props.points,
+            links: this.computeLinksInfos(this.props.links, this.props.points),
+            history: hist,
+            currentHistoryName: null
+        };
     }
 
     /**
@@ -32,7 +48,9 @@ class GraphTool extends Component {
             const name = this.getNextPointName(prevState.points);
             prevState.points[name] = {name: name, x: x, y: y};
 
-            return {points: prevState.points, links: prevState.links};
+            this.saveInHistory(prevState);
+
+            return prevState;
         });
     }
 
@@ -102,7 +120,123 @@ class GraphTool extends Component {
      * Create a new graph
      */
     handleNewGraph() {
-        this.setState({points: {}, links: {}});
+        this.setState((prevState, props) => {
+            prevState.points = {};
+            prevState.links = {};
+            prevState.currentHistoryName = null;
+            return prevState;
+        });
+    }
+
+    /**
+     * Create a new graph from the current one
+     */
+    handleCopyGraph() {
+        this.setState((prevState, props) => {
+            prevState.points = (JSON.parse(JSON.stringify(prevState.points)));
+            prevState.links = (JSON.parse(JSON.stringify(prevState.links)));
+            prevState.currentHistoryName = null;
+
+            this.saveInHistory(prevState);
+
+            return prevState;
+        });
+    }
+
+    /**
+     * Get a uniq name for the history
+     * @param state
+     * @returns {string}
+     */
+    getNewHistoryName(state) {
+        let history = state.history;
+        let i = 0;
+
+        do {
+            i++;
+        } while (('graph-' + i) in history);
+
+        return 'graph-' + i;
+    }
+
+    /**
+     * Save the current graph in history
+     * @param state
+     */
+    saveInHistory(state) {
+        let histName = state.currentHistoryName;
+
+        if (histName === null) {
+            // New history row
+            histName = this.getNewHistoryName(state);
+            state.currentHistoryName = histName;
+        }
+
+        state.history[histName] = {
+            name: histName,
+            lastModification: Date.now(),
+            points: state.points,
+            links: state.links
+        };
+
+        this.storeHistory(state.history);
+    }
+
+    /**
+     * Store the history
+     * @param history
+     */
+    storeHistory(history) {
+        localStorage.setItem('history', JSON.stringify(history));
+    }
+
+    /**
+     * Load an history
+     * @param history
+     */
+    handleLoadHistory(history) {
+        this.setState((prevState, props) => {
+            prevState.points = history.points;
+            prevState.links = history.links;
+            prevState.currentHistoryName = history.name;
+            return prevState;
+        });
+    }
+
+    /**
+     * On rename a history row
+     * @param newName
+     * @param oldName
+     */
+    handleRenameHistory(newName, oldName) {
+        this.setState((prevState, props) => {
+            prevState.currentHistoryName = newName;
+            prevState.history[newName] = prevState.history[oldName];
+            prevState.history[newName].name = newName;
+            delete prevState.history[oldName];
+
+            this.saveInHistory(prevState);
+
+            return prevState;
+        });
+    }
+
+    /**
+     * On delete a history row
+     * @param name
+     */
+    handleDeleteHistory(name) {
+        this.setState((prevState, props) => {
+            prevState.points = {};
+            prevState.links = {};
+            prevState.currentHistoryName = null;
+
+            delete prevState.history[name];
+
+            this.storeHistory(prevState.history);
+
+            return prevState;
+        });
     }
 
     /**
@@ -159,10 +293,16 @@ class GraphTool extends Component {
     render() {
         return (
             <section id="graph-tool">
-                <GraphToolBar onNewGraph={this.handleNewGraph}/>
+                <GraphToolBar history={this.state.history} currentHistoryRow={this.state.currentHistoryName}
+                              onNewGraph={this.handleNewGraph} onCopyGraph={this.handleCopyGraph}
+                              onClickHistoryRow={this.handleLoadHistory}
+                              onRenameHistoryRow={this.handleRenameHistory}
+                              onDeleteHistoryRow={this.handleDeleteHistory}/>
+
                 <GraphEditor onAddPoint={this.handleAddPoint} onDeletePoint={this.handleDeletePoint}
                              onAddLink={this.handleAddLink} onDeleteLink={this.handleDeleteLink}
                              points={this.state.points} links={this.state.links}/>
+
                 <GraphVisualization points={this.state.points} links={this.state.links}/>
             </section>
         );

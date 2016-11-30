@@ -1,0 +1,64 @@
+.graph-history {
+    margin-top: 5px;
+    border-bottom: 1px solid #356;
+    background-color: #efefef;
+    font-size: 0.7rem;
+}
+
+.graph-history h1 {
+    margin: 0;
+    background-color: #356;
+    color: #fff;
+    font-size: 0.8rem;
+    text-align: center;
+    padding: 2px 0;
+    font-weight: normal;
+    margin-bottom: 5px;
+}
+
+.graph-history p {
+    margin: 0 0 5px;
+}
+
+.graph-history ul {
+    list-style-type: none;
+    margin: 0 0 5px;
+    padding: 0;
+}
+
+.graph-history ul li {
+    cursor: pointer;
+    padding: 5px;
+}
+
+.graph-history ul li:hover {
+    background-color: #378;
+    color: #fff;
+}
+
+.graph-history ul li.selected {
+    background-color: #356;
+    color: #fff;
+    cursor: default;
+}
+
+.graph-history ul li h2 {
+    margin: 0 0 5px;
+}
+
+.graph-history ul li > span {
+    float: right;
+}
+
+.graph-history ul li > span .fa {
+    cursor: pointer;
+    margin-left: 5px;
+    font-size: 1rem;
+}
+
+.graph-history ul li p {
+    margin: 0;
+    text-align: right;
+    font-style: italic;
+    font-size: 0.6rem;
+}
