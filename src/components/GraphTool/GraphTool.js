@@ -74,6 +74,8 @@ class GraphTool extends Component {
                 }
             }
 
+            this.saveInHistory(prevState);
+
             return prevState;
         });
     }
@@ -97,6 +99,9 @@ class GraphTool extends Component {
                 from: from.props.point.name,
                 to: to.props.point.name
             }, prevState.points);
+
+            this.saveInHistory(prevState);
+
             return prevState;
         });
     }
@@ -111,6 +116,8 @@ class GraphTool extends Component {
 
             // Delete the link
             delete prevState.links[linkName];
+
+            this.saveInHistory(prevState);
 
             return prevState;
         });
