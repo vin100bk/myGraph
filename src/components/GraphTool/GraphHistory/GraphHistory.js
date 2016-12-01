@@ -9,6 +9,7 @@ class GraphHistory extends Component {
         super(props);
 
         this.onRenameRow = this.onRenameRow.bind(this);
+        this.handleClickDelete = this.handleClickDelete.bind(this);
     }
 
     /**
@@ -25,7 +26,13 @@ class GraphHistory extends Component {
             // Uniq
             this.props.onRenameHistoryRow(newName, oldName);
         }
+    }
 
+    handleClickDelete(e) {
+        e.stopPropagation();
+        if (confirm('Are you sure to empty all the history?')) {
+            this.props.onEmptyHistory();
+        }
     }
 
     render() {
@@ -52,7 +59,11 @@ class GraphHistory extends Component {
 
         return (
             <section className="graph-history">
-                <h1>History</h1>
+                <h1>
+                    {children.length > 0 &&
+                    <i className="fa fa-trash" aria-hidden="true" onClick={this.handleClickDelete}></i>}
+                    History
+                </h1>
 
                 {children.length > 0 ? (
                     <ul>{children}</ul>

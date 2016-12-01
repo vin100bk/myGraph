@@ -23,6 +23,7 @@ class GraphTool extends Component {
         this.handleLoadHistory = this.handleLoadHistory.bind(this);
         this.handleRenameHistory = this.handleRenameHistory.bind(this);
         this.handleDeleteHistory = this.handleDeleteHistory.bind(this);
+        this.handleEmptyHistory = this.handleEmptyHistory.bind(this);
 
         let hist = localStorage.getItem('history');
         if (hist) {
@@ -272,6 +273,20 @@ class GraphTool extends Component {
     }
 
     /**
+     * Empty the history
+     */
+    handleEmptyHistory() {
+        this.setState({
+            points: {},
+            links: {},
+            history: {},
+            currentHistoryName: null
+        });
+
+        this.storeHistory({});
+    }
+
+    /**
      * Compute information for all links
      * @param links
      * @param points
@@ -325,11 +340,13 @@ class GraphTool extends Component {
     render() {
         return (
             <section id="graph-tool">
-                <GraphToolBar history={this.state.history} currentHistoryRow={this.state.currentHistoryName}
+                <GraphToolBar points={this.state.points} links={this.state.links} history={this.state.history}
+                              currentHistoryRow={this.state.currentHistoryName}
                               onNewGraph={this.handleNewGraph} onCopyGraph={this.handleCopyGraph}
                               onClickHistoryRow={this.handleLoadHistory}
                               onRenameHistoryRow={this.handleRenameHistory}
-                              onDeleteHistoryRow={this.handleDeleteHistory}/>
+                              onDeleteHistoryRow={this.handleDeleteHistory}
+                              onEmptyHistory={this.handleEmptyHistory}/>
 
                 <GraphEditor onAddPoint={this.handleAddPoint} onDeletePoint={this.handleDeletePoint}
                              onUpdatePoint={this.handleUpdatePoint} onAddLink={this.handleAddLink}

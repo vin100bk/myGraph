@@ -12,9 +12,11 @@ class GraphToolBar extends Component {
                 <GraphOptions history={this.props.history} currentHistoryRow={this.props.currentHistoryRow}
                               onClickHistoryRow={this.props.onClickHistoryRow}
                               onRenameHistoryRow={this.props.onRenameHistoryRow}
-                              onDeleteHistoryRow={this.props.onDeleteHistoryRow}/>
+                              onDeleteHistoryRow={this.props.onDeleteHistoryRow}
+                              onEmptyHistory={this.props.onEmptyHistory}/>
 
-                <GraphButtons currentHistoryRow={this.props.currentHistoryRow} onNewGraph={this.props.onNewGraph}
+                <GraphButtons points={this.props.points} links={this.props.links}
+                              currentHistoryRow={this.props.currentHistoryRow} onNewGraph={this.props.onNewGraph}
                               onCopyGraph={this.props.onCopyGraph}/>
             </section>
         );

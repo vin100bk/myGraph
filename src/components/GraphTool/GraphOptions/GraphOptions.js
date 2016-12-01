@@ -11,7 +11,8 @@ class GraphOptions extends Component {
                 <GraphHistory history={this.props.history} currentHistoryRow={this.props.currentHistoryRow}
                               onClickHistoryRow={this.props.onClickHistoryRow}
                               onRenameHistoryRow={this.props.onRenameHistoryRow}
-                              onDeleteHistoryRow={this.props.onDeleteHistoryRow}/>
+                              onDeleteHistoryRow={this.props.onDeleteHistoryRow}
+                              onEmptyHistory={this.props.onEmptyHistory}/>
             </section>
         );
     }

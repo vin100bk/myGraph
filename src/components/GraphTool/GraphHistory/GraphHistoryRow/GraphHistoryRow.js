@@ -38,7 +38,7 @@ class GraphHistoryRow extends Component {
      */
     handleClickDelete(e) {
         e.stopPropagation();
-        if (confirm('Are you sure to delete the history "' + this.props.history.name + '" ?')) {
+        if (confirm('Are you sure to delete the history "' + this.props.history.name + '"?')) {
             this.props.onDelete(this.props.history.name);
         }
     }

@@ -47,10 +47,12 @@ class GraphButtons extends Component {
     render() {
         return (
             <section className="graph-buttons">
+                {Object.keys(this.props.points).length > 0 &&
                 <GraphButton onClick={this.handleNew}>
                     <i className="fa fa-file-o" aria-hidden="true"></i>
                     New graph
                 </GraphButton>
+                }
 
                 {this.props.currentHistoryRow &&
                 <GraphButton onClick={this.handleCopy}>
@@ -59,10 +61,12 @@ class GraphButtons extends Component {
                 </GraphButton>
                 }
 
+                {Object.keys(this.props.points).length > 0 &&
                 <GraphButton onClick={this.handleSavePicture}>
                     <i className="fa fa-file-image-o" aria-hidden="true"></i>
                     Save as picture
                 </GraphButton>
+                }
             </section>
         );
     }
