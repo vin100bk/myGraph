@@ -15,6 +15,8 @@ class GraphEditor extends Component {
         this.handleClickPoint = this.handleClickPoint.bind(this);
         this.handleClickLink = this.handleClickLink.bind(this);
         this.handleMouseMove = this.handleMouseMove.bind(this);
+        this.handleDragOver = this.handleDragOver.bind(this);
+        this.handleDrop = this.handleDrop.bind(this);
 
         document.onkeydown = function (event) {
             if (event.keyCode === 27) {
@@ -82,11 +84,11 @@ class GraphEditor extends Component {
      * @param nextProps
      */
     componentWillReceiveProps(nextProps) {
-        if(this.props.points !== nextProps.points || this.props.links !== nextProps.links) {
-            if(this.state.pointSelected) {
+        if (this.props.points !== nextProps.points || this.props.links !== nextProps.links) {
+            if (this.state.pointSelected) {
                 this.state.pointSelected.setState({isSelected: false});
             }
-            if(this.state.linkSelected) {
+            if (this.state.linkSelected) {
                 this.state.linkSelected.setState({isSelected: false});
             }
             this.setState({pointSelected: null, linkSelected: null});
@@ -187,6 +189,43 @@ class GraphEditor extends Component {
     }
 
     /**
+     * When a point is dragged
+     * @param e
+     */
+    handleDragOver(e) {
+        if (e.pageX >= this.coordinatesPanel.left + 9 && e.pageX <= this.coordinatesPanel.right - 9
+            && e.pageY >= this.coordinatesPanel.top + 9 && e.pageY <= this.coordinatesPanel.bottom - 9) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = "move";
+
+            // Display the coordinates
+            this.hideCoordinates();
+            this.displayCoordinates(Math.round(e.pageX - this.coordinatesPanel.left), Math.round(e.pageY));
+        }
+    }
+
+    /**
+     * When a point is drop after a drag
+     * @param e
+     */
+    handleDrop(e) {
+        e.preventDefault();
+        let point = e.dataTransfer.getData('Point');
+        if (point !== '') {
+            point = JSON.parse(point);
+            point.x = e.pageX - this.coordinatesPanel.left - 9;
+            point.y = e.pageY - this.coordinatesPanel.top - 9;
+            this.props.onUpdatePoint(point);
+
+            // Disable the coordinate links, related to the CoordPoint component but I did not find any solution
+            let lines = document.getElementsByClassName('graph-dot-coordinates');
+            for (let i = 0; i < lines.length; i++) {
+                lines[i].style.display = 'none';
+            }
+        }
+    }
+
+    /**
      * Hide the coordinates lines
      */
     hideCoordinates() {
@@ -220,7 +259,8 @@ class GraphEditor extends Component {
         for (const name of Object.keys(this.props.points)) {
             let point = this.props.points[name];
             children.push(<CoordPoint key={name} point={point} onClick={this.handleClickPoint}
-                                      onMouseOver={this.handleHoverPoint} onMouseOut={this.handleOutPoint}/>);
+                                      onMouseOver={this.handleHoverPoint} onMouseOut={this.handleOutPoint}
+                                      onDragStart={this.handleDragStart}/>);
         }
 
         // Links
@@ -234,7 +274,8 @@ class GraphEditor extends Component {
                 <h1>Graph editor</h1>
 
                 <div id="graph-editor-panel" className={this.state.pointSelected ? 'point-selected' : ''}
-                     onClick={this.handleClick} onMouseMove={this.handleMouseMove}>
+                     onClick={this.handleClick} onMouseMove={this.handleMouseMove} onDragOver={this.handleDragOver}
+                     onDrop={this.handleDrop}>
                     {children}
                 </div>
             </section>

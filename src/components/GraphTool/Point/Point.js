@@ -8,6 +8,18 @@ class Point extends Component {
         this.state = {isSelected: false};
 
         this.handleClick = this.handleClick.bind(this);
+        this.handleDragStart = this.handleDragStart.bind(this);
+    }
+
+    /**
+     * When a drag is started on a point
+     * @param e
+     */
+    handleDragStart(e) {
+        e.stopPropagation();
+        e.dataTransfer.effectAllowed = "move";
+        e.dataTransfer.setData('Point', JSON.stringify(this.props.point));
+        this.props.onDragStart();
     }
 
     /**
@@ -26,9 +38,9 @@ class Point extends Component {
         };
 
         return (
-            <div className={this.state.isSelected ? 'graph-dot active' : 'graph-dot'} style={style}
+            <div className={this.state.isSelected ? 'graph-dot active' : 'graph-dot'} style={style} draggable="true"
                  onClick={this.handleClick} onMouseOver={this.props.onMouseOver}
-                 onMouseOut={this.props.onMouseOut}/>
+                 onMouseOut={this.props.onMouseOut} onDragStart={this.handleDragStart}/>
         );
     }
 }

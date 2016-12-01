@@ -11,6 +11,7 @@ class CoordPoint extends Component {
 
         this.handleHoverPoint = this.handleHoverPoint.bind(this);
         this.handleOutPoint = this.handleOutPoint.bind(this);
+        this.handleDragStart = this.handleDragStart.bind(this);
     }
 
     /**
@@ -18,10 +19,7 @@ class CoordPoint extends Component {
      * @param e
      */
     handleHoverPoint(e) {
-        let lines = document.getElementsByClassName('graph-dot-coordinates');
-        for (let i = 0; i < lines.length; i++) {
-            lines[i].style.display = 'none';
-        }
+        this.disableCoordinates();
     }
 
     /**
@@ -29,9 +27,33 @@ class CoordPoint extends Component {
      * @param e
      */
     handleOutPoint(e) {
+        this.enableCoordinates();
+    }
+
+    /**
+     * When a drag on a point start
+     */
+    handleDragStart() {
+        this.enableCoordinates();
+    }
+
+    /**
+     * Enable the coordinate lines
+     */
+    enableCoordinates() {
         let lines = document.getElementsByClassName('graph-dot-coordinates');
         for (let i = 0; i < lines.length; i++) {
             lines[i].style.display = 'block';
+        }
+    }
+
+    /**
+     * Disable the coordinate links
+     */
+    disableCoordinates() {
+        let lines = document.getElementsByClassName('graph-dot-coordinates');
+        for (let i = 0; i < lines.length; i++) {
+            lines[i].style.display = 'none';
         }
     }
 
@@ -47,7 +69,8 @@ class CoordPoint extends Component {
         return (
             <div>
                 <Point point={this.props.point} onClick={this.props.onClick}
-                       onMouseOver={this.handleHoverPoint} onMouseOut={this.handleOutPoint}/>
+                       onMouseOver={this.handleHoverPoint} onMouseOut={this.handleOutPoint}
+                       onDragStart={this.handleDragStart}/>
 
                 <div
                     className={'graph-dot-coordinates graph-dot-coordinates-x graph-dot-coordinates-x-' + styleCoordinatesX.top}
