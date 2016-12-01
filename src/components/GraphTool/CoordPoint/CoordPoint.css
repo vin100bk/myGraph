@@ -19,7 +19,3 @@
 .graph-dot-coordinates-y {
     width: 1px;
 }
-
-#graph-editor-panel.point-selected .graph-dot-coordinates {
-    display: none;
-}

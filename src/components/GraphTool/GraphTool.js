@@ -15,6 +15,7 @@ class GraphTool extends Component {
 
         this.handleAddPoint = this.handleAddPoint.bind(this);
         this.handleDeletePoint = this.handleDeletePoint.bind(this);
+        this.handleUpdatePoint = this.handleUpdatePoint.bind(this);
         this.handleAddLink = this.handleAddLink.bind(this);
         this.handleDeleteLink = this.handleDeleteLink.bind(this);
         this.handleNewGraph = this.handleNewGraph.bind(this);
@@ -67,10 +68,34 @@ class GraphTool extends Component {
 
             // Delete the links
             for (const name of Object.keys(prevState.links)) {
-                let link = this.props.links[name];
+                let link = prevState.links[name];
 
                 if (parseInt(link.from, 10) === pointName || parseInt(link.to, 10) === pointName) {
                     delete prevState.links[name];
+                }
+            }
+
+            this.saveInHistory(prevState);
+
+            return prevState;
+        });
+    }
+
+    /**
+     * Update a point
+     * @param point
+     */
+    handleUpdatePoint(point) {
+        this.setState((prevState, props) => {
+            // Replace the point
+            prevState.points[point.name] = point;
+
+            // Update the links
+            for (const name of Object.keys(prevState.links)) {
+                let link = prevState.links[name];
+
+                if (parseInt(link.from, 10) === point.name || parseInt(link.to, 10) === point.name) {
+                    prevState.links[name] = this.computeLinkInfos(link, prevState.points);
                 }
             }
 
@@ -307,8 +332,8 @@ class GraphTool extends Component {
                               onDeleteHistoryRow={this.handleDeleteHistory}/>
 
                 <GraphEditor onAddPoint={this.handleAddPoint} onDeletePoint={this.handleDeletePoint}
-                             onAddLink={this.handleAddLink} onDeleteLink={this.handleDeleteLink}
-                             points={this.state.points} links={this.state.links}/>
+                             onUpdatePoint={this.handleUpdatePoint} onAddLink={this.handleAddLink}
+                             onDeleteLink={this.handleDeleteLink} points={this.state.points} links={this.state.links}/>
 
                 <GraphVisualization points={this.state.points} links={this.state.links}/>
             </section>
