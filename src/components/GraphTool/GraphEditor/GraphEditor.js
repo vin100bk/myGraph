@@ -32,14 +32,14 @@ class GraphEditor extends Component {
                 let point = this.state.pointSelected.props.point;
                 if (event.keyCode === 37) {
                     // Left
-                    if ((this.state.pointSelected.props.point.x + 18) <= 0) {
+                    if ((this.state.pointSelected.props.point.x) <= 0) {
                         return;
                     }
 
                     point.x--;
                 } else if (event.keyCode === 38) {
                     // Top
-                    if ((this.state.pointSelected.props.point.y + 18) <= 0) {
+                    if ((this.state.pointSelected.props.point.y) <= 0) {
                         return;
                     }
 
