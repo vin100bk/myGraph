@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 
 import './GraphEditor.css';
 
+import GraphEditorToolBar from './GraphEditorToolBar/GraphEditorToolBar';
 import CoordPoint from '../CoordPoint/CoordPoint';
 import Link from '../Link/Link';
+
 
 class GraphEditor extends Component {
     constructor(props) {
@@ -17,56 +19,64 @@ class GraphEditor extends Component {
         this.handleMouseMove = this.handleMouseMove.bind(this);
         this.handleDragOver = this.handleDragOver.bind(this);
         this.handleDrop = this.handleDrop.bind(this);
+        this.handleUpdatePoint = this.handleUpdatePoint.bind(this);
+        this.handleUpdateLink = this.handleUpdateLink.bind(this);
+        this.handleApplyAllPoints = this.handleApplyAllPoints.bind(this);
+        this.handleApplyAllLinks = this.handleApplyAllLinks.bind(this);
 
         document.onkeydown = function (event) {
-            if (event.keyCode === 27) {
-                // Escape
-                this.handleEscape();
-            } else if (event.keyCode === 8) {
-                // Delete
-                if (this.state.pointSelected) {
-                    this.handleDeletePoint(this.state.pointSelected);
-                } else if (this.state.linkSelected) {
-                    this.handleDeleteLink(this.state.linkSelected);
+            if (document.activeElement === document.body) {
+                if (event.keyCode === 27) {
+                    // Escape
+                    event.preventDefault();
+                    this.handleEscape();
+                } else if (event.keyCode === 8) {
+                    // Delete
+                    if (this.state.pointSelected) {
+                        this.handleDeletePoint(this.state.pointSelected);
+                    } else if (this.state.linkSelected) {
+                        this.handleDeleteLink(this.state.linkSelected);
+                    }
+                } else if (this.state.pointSelected && event.keyCode >= 37 && event.keyCode <= 40) {
+                    // Arrow
+                    event.preventDefault();
+                    let point = this.state.pointSelected;
+                    if (event.keyCode === 37) {
+                        // Left
+                        if ((point.x) <= 0) {
+                            return;
+                        }
+
+                        point.x--;
+                    } else if (event.keyCode === 38) {
+                        // Top
+                        if ((point.y) <= 0) {
+                            return;
+                        }
+
+                        point.y--;
+                    } else if (event.keyCode === 39) {
+                        // Right
+                        if ((point.x + 18) >= Math.floor(this.coordinatesPanel.width)) {
+                            return;
+                        }
+
+                        point.x++;
+                    } else if (event.keyCode === 40) {
+                        // Down
+                        if ((point.y + 18) >= Math.floor(this.coordinatesPanel.height)) {
+                            return;
+                        }
+
+                        point.y++;
+                    }
+
+                    this.props.onUpdatePoint(point);
+
+                    // Display the coordinates
+                    this.hideCoordinates();
+                    this.displayCoordinates(Math.round(point.x) + 9, Math.round(point.y) + 9);
                 }
-            } else if (this.state.pointSelected && event.keyCode >= 37 && event.keyCode <= 40) {
-                // Arrow
-                let point = this.state.pointSelected.props.point;
-                if (event.keyCode === 37) {
-                    // Left
-                    if ((this.state.pointSelected.props.point.x) <= 0) {
-                        return;
-                    }
-
-                    point.x--;
-                } else if (event.keyCode === 38) {
-                    // Top
-                    if ((this.state.pointSelected.props.point.y) <= 0) {
-                        return;
-                    }
-
-                    point.y--;
-                } else if (event.keyCode === 39) {
-                    // Right
-                    if ((this.state.pointSelected.props.point.x + 18) >= Math.floor(this.coordinatesPanel.width)) {
-                        return;
-                    }
-
-                    point.x++;
-                } else if (event.keyCode === 40) {
-                    // Down
-                    if ((this.state.pointSelected.props.point.y + 18) >= Math.floor(this.coordinatesPanel.height)) {
-                        return;
-                    }
-
-                    point.y++;
-                }
-
-                this.props.onUpdatePoint(point);
-
-                // Display the coordinates
-                this.hideCoordinates();
-                this.displayCoordinates(Math.round(point.x) + 9, Math.round(point.y) + 9);
             }
         }.bind(this);
     }
@@ -85,12 +95,6 @@ class GraphEditor extends Component {
      */
     componentWillReceiveProps(nextProps) {
         if (this.props.points !== nextProps.points || this.props.links !== nextProps.links) {
-            if (this.state.pointSelected) {
-                this.state.pointSelected.setState({isSelected: false});
-            }
-            if (this.state.linkSelected) {
-                this.state.linkSelected.setState({isSelected: false});
-            }
             this.setState({pointSelected: null, linkSelected: null});
         }
     }
@@ -111,10 +115,12 @@ class GraphEditor extends Component {
      * @param e
      */
     handleClick(e) {
-        if (this.state.pointSelected === null) {
+        if (this.state.pointSelected === null && this.state.linkSelected === null) {
             const x = e.pageX - this.coordinatesPanel.left - 9;
             const y = e.pageY - this.coordinatesPanel.top - 9;
             this.props.onAddPoint(x, y);
+        } else {
+            this.handleEscape();
         }
     }
 
@@ -125,15 +131,17 @@ class GraphEditor extends Component {
     handleClickPoint(point) {
         if (this.state.pointSelected) {
             // A point is already selected
-            try {
-                this.props.onAddLink(this.state.pointSelected, point);
-                this.handleEscape();
-            } catch (e) {
+            if (this.state.pointSelected !== point) {
+                try {
+                    this.props.onAddLink(this.state.pointSelected, point);
+                    this.handleEscape();
+                } catch (e) {
+                    alert(e);
+                }
             }
         } else {
             // No point selected
             this.handleEscape();
-            point.setState({isSelected: true});
             this.setState((prevState, props) => {
                 prevState.pointSelected = point;
                 return prevState;
@@ -147,7 +155,6 @@ class GraphEditor extends Component {
      */
     handleClickLink(link) {
         this.handleEscape();
-        link.setState({isSelected: true});
         this.setState((prevState, props) => {
             prevState.linkSelected = link;
             return prevState;
@@ -158,16 +165,8 @@ class GraphEditor extends Component {
      * On press on the escape key
      */
     handleEscape() {
-        this.setState((prevState, props) => {
-            if (prevState.pointSelected) {
-                prevState.pointSelected.setState({isSelected: false});
-            }
-            if (prevState.linkSelected) {
-                prevState.linkSelected.setState({isSelected: false});
-            }
-
-            return {pointSelected: null, linkSelected: null};
-        });
+        this.setState({pointSelected: null, linkSelected: null});
+        this.hideCoordinates();
     }
 
     /**
@@ -175,8 +174,10 @@ class GraphEditor extends Component {
      * @param point
      */
     handleDeletePoint(point) {
-        this.props.onDeletePoint(point);
-        this.setState({pointSelected: null, linkSelected: null});
+        if (confirm('Are you sure to delete this point? It will also delete all the associated links')) {
+            this.props.onDeletePoint(point);
+            this.setState({pointSelected: null, linkSelected: null});
+        }
     }
 
     /**
@@ -184,8 +185,10 @@ class GraphEditor extends Component {
      * @param link
      */
     handleDeleteLink(link) {
-        this.props.onDeleteLink(link);
-        this.setState({pointSelected: null, linkSelected: null});
+        if (confirm('Are you sure to delete this link?')) {
+            this.props.onDeleteLink(link);
+            this.setState({pointSelected: null, linkSelected: null});
+        }
     }
 
     /**
@@ -226,6 +229,64 @@ class GraphEditor extends Component {
     }
 
     /**
+     * When updating a point with the toolbar
+     * @param props
+     */
+    handleUpdatePoint(props) {
+        this.updatePoint(this.state.pointSelected, props);
+    }
+
+    /**
+     * When updating a link with the toolbar
+     * @param props
+     */
+    handleUpdateLink(props) {
+        this.updateLink(this.state.linkSelected, props);
+    }
+
+    /**
+     * Apply some properties to all the points
+     * @param props
+     */
+    handleApplyAllPoints(props) {
+        for (const name of Object.keys(this.props.points)) {
+            let point = this.props.points[name];
+            this.updatePoint(point, props);
+        }
+    }
+
+    /**
+     * Apply some properties to all the links
+     * @param props
+     */
+    handleApplyAllLinks(props) {
+        for (const name of Object.keys(this.props.links)) {
+            let link = this.props.links[name];
+            this.updateLink(link, props);
+        }
+    }
+
+    /**
+     * Update a point
+     * @param point
+     * @param props
+     */
+    updatePoint(point, props) {
+        let p = Object.assign({}, point, props);
+        this.props.onUpdatePoint(p);
+    }
+
+    /**
+     * Update a link
+     * @param link
+     * @param props
+     */
+    updateLink(link, props) {
+        let l = Object.assign({}, link, props);
+        this.props.onUpdateLink(l);
+    }
+
+    /**
      * Hide the coordinates lines
      */
     hideCoordinates() {
@@ -254,26 +315,66 @@ class GraphEditor extends Component {
     }
 
     render() {
+        let allPointsColor;
         let children = [];
         // Points
         for (const name of Object.keys(this.props.points)) {
             let point = this.props.points[name];
-            children.push(<CoordPoint key={name} point={point} onClick={this.handleClickPoint}
+            children.push(<CoordPoint key={name} point={point}
+                                      isSelected={this.state.pointSelected && this.state.pointSelected.name === name}
+                                      onClick={this.handleClickPoint}
                                       onMouseOver={this.handleHoverPoint} onMouseOut={this.handleOutPoint}
                                       onDragStart={this.handleDragStart}/>);
+
+            // Store the color of all points (if all points have the same color, null otherwise)
+            if (typeof allPointsColor === 'undefined') {
+                allPointsColor = point.color;
+            } else if (allPointsColor !== point.color) {
+                allPointsColor = null;
+            }
+
         }
 
         // Links
+        let allLinksColor;
         for (const name of Object.keys(this.props.links)) {
             let link = this.props.links[name];
-            children.push(<Link key={name} link={link} onClick={this.handleClickLink}/>);
+            children.push(<Link key={name} link={link}
+                                isSelected={this.state.linkSelected && this.state.linkSelected.name === name}
+                                onClick={this.handleClickLink}/>);
+
+            // Store the color of all links (if all links have the same color, null otherwise)
+            if (typeof allLinksColor === 'undefined') {
+                allLinksColor = link.color;
+            } else if (allLinksColor !== link.color) {
+                allLinksColor = null;
+            }
+        }
+
+        let panelClass = '';
+        if (this.state.pointSelected) {
+            panelClass = 'point-selected';
+        } else if (this.state.linkSelected) {
+            panelClass = 'link-selected';
         }
 
         return (
             <section id="graph-editor">
+                {(this.state.pointSelected || this.state.linkSelected) &&
+                <GraphEditorToolBar point={this.state.pointSelected} link={this.state.linkSelected}
+                                    defaultPointColor={this.props.defaultPointColor}
+                                    defaultLinkColor={this.props.defaultLinkColor} allPointsColor={allPointsColor}
+                                    allLinksColor={allLinksColor}
+                                    onUpdatePoint={this.handleUpdatePoint} onUpdateLink={this.handleUpdateLink}
+                                    onApplyAllPoints={this.handleApplyAllPoints}
+                                    onApplyAllLinks={this.handleApplyAllLinks}
+                                    onUpdateDefaultPointColor={this.props.onUpdateDefaultPointColor}
+                                    onUpdateDefaultLinkColor={this.props.onUpdateDefaultLinkColor}/>
+                }
+
                 <h1>Graph editor</h1>
 
-                <div id="graph-editor-panel" className={this.state.pointSelected ? 'point-selected' : ''}
+                <div id="graph-editor-panel" className={panelClass}
                      onClick={this.handleClick} onMouseMove={this.handleMouseMove} onDragOver={this.handleDragOver}
                      onDrop={this.handleDrop}>
                     {children}

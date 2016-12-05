@@ -5,7 +5,10 @@ import './Point.css';
 class Point extends Component {
     constructor(props) {
         super(props);
-        this.state = {isSelected: false};
+
+        if (typeof this.props.point.name !== 'string') {
+            throw new Error('A point name has to be a string. "' + this.props.point.name + '" is not a string');
+        }
 
         this.handleClick = this.handleClick.bind(this);
         this.handleDragStart = this.handleDragStart.bind(this);
@@ -28,7 +31,7 @@ class Point extends Component {
      */
     handleClick(e) {
         e.stopPropagation();
-        this.props.onClick(this);
+        this.props.onClick(this.props.point);
     }
 
     render() {
@@ -37,10 +40,14 @@ class Point extends Component {
             left: this.props.point.x + 'px',
         };
 
+        const spanStyle = {
+            backgroundColor: this.props.point.color
+        };
+
         return (
-            <div className={this.state.isSelected ? 'graph-dot active' : 'graph-dot'} style={style} draggable="true"
-                 onClick={this.handleClick} onMouseOver={this.props.onMouseOver}
-                 onMouseOut={this.props.onMouseOut} onDragStart={this.handleDragStart}/>
+            <div className={this.props.isSelected ? 'graph-dot active' : 'graph-dot'} style={style} draggable="true"
+                 onClick={this.handleClick} onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut}
+                 onDragStart={this.handleDragStart}><span style={spanStyle}/></div>
         );
     }
 }

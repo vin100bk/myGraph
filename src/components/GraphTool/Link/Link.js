@@ -5,7 +5,13 @@ import './Link.css';
 class Link extends Component {
     constructor(props) {
         super(props);
-        this.state = {isSelected: false};
+
+        if (typeof this.props.link.from !== 'string') {
+            throw new Error('A point name has to a string. "' + this.props.link.from + '" is not a string');
+        }
+        if (typeof this.props.link.to !== 'string') {
+            throw new Error('A point name has to a string. "' + this.props.link.to + '" is not a string');
+        }
 
         this.handleClick = this.handleClick.bind(this);
     }
@@ -15,7 +21,7 @@ class Link extends Component {
      */
     handleClick(e) {
         e.stopPropagation();
-        this.props.onClick(this);
+        this.props.onClick(this.props.link);
     }
 
     render() {
@@ -26,10 +32,14 @@ class Link extends Component {
             width: this.props.link.width + 'px'
         };
 
+        const innerStyle = {
+            backgroundColor: this.props.link.color
+        };
+
         return (
-            <div className={this.state.isSelected ? 'graph-line active' : 'graph-line'} style={style}
+            <div className={this.props.isSelected ? 'graph-line active' : 'graph-line'} style={style}
                  onClick={this.handleClick}>
-                <div className="graph-line-inner"/>
+                <div className="graph-line-inner" style={innerStyle}/>
             </div>
         );
     }

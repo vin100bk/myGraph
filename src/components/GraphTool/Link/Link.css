@@ -6,7 +6,6 @@
 }
 
 .graph-line .graph-line-inner {
-    background-color: #79E0FF;
     /*width: 0;*/
     width: 100%;
     height: 2px;
@@ -23,11 +22,11 @@
 }
 
 #graph-editor-panel .graph-line:hover .graph-line-inner {
-    background-color: #79B0CF;
+    filter: brightness(85%);
 }
 
 #graph-editor-panel .graph-line.active .graph-line-inner {
-    background-color: #7990AF;
+    filter: brightness(65%);
 }
 
 .graph-line.asdfasdfasdf .graph-line-inner {

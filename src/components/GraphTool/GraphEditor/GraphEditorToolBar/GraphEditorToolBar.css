@@ -1,0 +1,13 @@
+#graph-editor-toolbar {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 200px;
+    z-index: 20;
+    border: 1px solid #356;
+    background-color: #fff;
+}
+
+.graph-editor-toolbar-content {
+    padding: 5px 10px;
+}

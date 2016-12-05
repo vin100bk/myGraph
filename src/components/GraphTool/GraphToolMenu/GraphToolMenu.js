@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 
-import './GraphToolBar.css';
+import './GraphToolMenu.css';
 
 import GraphOptions from '../GraphOptions/GraphOptions';
 import GraphButtons from '../GraphButtons/GraphButtons';
 
-class GraphToolBar extends Component {
+class GraphToolMenu extends Component {
     render() {
         return (
-            <section id="graph-toolbar">
+            <section id="graph-menu">
                 <GraphOptions history={this.props.history} currentHistoryRow={this.props.currentHistoryRow}
                               onClickHistoryRow={this.props.onClickHistoryRow}
                               onRenameHistoryRow={this.props.onRenameHistoryRow}
@@ -23,4 +23,4 @@ class GraphToolBar extends Component {
     }
 }
 
-export default GraphToolBar;
+export default GraphToolMenu;

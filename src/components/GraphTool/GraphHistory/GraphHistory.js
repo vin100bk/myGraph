@@ -59,9 +59,9 @@ class GraphHistory extends Component {
 
         return (
             <section className="graph-history">
-                <h1>
+                <h1 className="title-menu">
                     {children.length > 0 &&
-                    <i className="fa fa-trash" aria-hidden="true" onClick={this.handleClickDelete}></i>}
+                    <i className="fa fa-trash icon" aria-hidden="true" onClick={this.handleClickDelete}></i>}
                     History
                 </h1>
 

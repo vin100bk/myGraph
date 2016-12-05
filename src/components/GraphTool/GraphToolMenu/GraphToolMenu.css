@@ -1,4 +1,4 @@
-#graph-toolbar {
+#graph-menu {
     position: absolute;
     top: 0;
     left: 0;
@@ -7,11 +7,11 @@
     border-right: 1px solid #000;
 }
 
-#graph-toolbar .graph-options, #graph-toolbar .graph-buttons {
+#graph-menu .graph-options, #graph-menu .graph-buttons {
     position: absolute;
     width: 100%;
 }
 
-#graph-toolbar .graph-buttons {
+#graph-menu .graph-buttons {
     bottom: 0;
 }

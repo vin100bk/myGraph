@@ -7,7 +7,6 @@ import Point from '../Point/Point';
 class CoordPoint extends Component {
     constructor(props) {
         super(props);
-        this.state = {isSelected: false};
 
         this.handleHoverPoint = this.handleHoverPoint.bind(this);
         this.handleOutPoint = this.handleOutPoint.bind(this);
@@ -68,7 +67,7 @@ class CoordPoint extends Component {
 
         return (
             <div>
-                <Point point={this.props.point} onClick={this.props.onClick}
+                <Point point={this.props.point} isSelected={this.props.isSelected} onClick={this.props.onClick}
                        onMouseOver={this.handleHoverPoint} onMouseOut={this.handleOutPoint}
                        onDragStart={this.handleDragStart}/>
 

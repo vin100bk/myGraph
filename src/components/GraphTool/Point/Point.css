@@ -12,8 +12,7 @@
     transform: scale(0.5);*/
 }
 
-.graph-dot:before {
-    background-color: #79E0FF;
+.graph-dot span {
     border-radius: 50%;
     content: "";
     width: 8px;
@@ -31,23 +30,29 @@
     cursor: pointer;
 }
 
-#graph-editor-panel .graph-dot:hover:before {
-    background-color: #79B0CF;
-    width: 10px;
-    height: 10px;
-    margin: -5px 0 0 -5px;
+#graph-editor-panel.point-selected .graph-dot:hover {
+    cursor: ew-resize;
 }
 
-#graph-editor-panel .graph-dot.active {
+#graph-editor-panel.point-selected .graph-dot.active:hover {
     cursor: move;
 }
 
-#graph-editor-panel .graph-dot.active:before {
-    background-color: #7990AF;
+#graph-editor-panel .graph-dot:hover span {
+    filter: brightness(85%);
     width: 10px;
     height: 10px;
     margin: -5px 0 0 -5px;
 }
+
+#graph-editor-panel .graph-dot.active span {
+    filter: brightness(65%);
+    width: 10px;
+    height: 10px;
+    margin: -5px 0 0 -5px;
+}
+
+
 
 /*
  * Transitions
