@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Domtoimage from 'dom-to-image';
-import FileSaver from 'file-saver';
 
 import './GraphButtons.css';
 
@@ -37,9 +36,12 @@ class GraphButtons extends Component {
      */
     handleSavePicture(e) {
         e.preventDefault();
-        Domtoimage.toBlob(document.getElementById('graph-visualization-panel'))
-            .then(function (blob) {
-                FileSaver.saveAs(blob, 'myGraph.png');
+        Domtoimage.toSvg(document.getElementById('graph-visualization-panel'))
+            .then(function (imgContent) {
+                let link = document.createElement('a');
+                link.download = 'myGraph.svg';
+                link.href = imgContent;
+                link.click();
 
             });
     }
