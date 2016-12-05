@@ -49,11 +49,17 @@ class GraphTool extends Component {
      * Add a point
      * @param x
      * @param y
+     * @param callback
      */
-    handleAddPoint(x, y) {
+    handleAddPoint(x, y, callback) {
         this.setState((prevState, props) => {
+            // Create the point
             const name = this.getNextPointName(prevState.points);
-            prevState.points[name] = {name: name, x: x, y: y, color: this.state.defaultPointColor};
+            const point = {name: name, x: x, y: y, color: this.state.defaultPointColor};
+            prevState.points[name] = point;
+
+            // Call the callback with the new point
+            callback(point);
 
             this.saveInHistory(prevState);
 
@@ -115,8 +121,9 @@ class GraphTool extends Component {
      * Add a link
      * @param from
      * @param to
+     * @param callback
      */
-    handleAddLink(from, to) {
+    handleAddLink(from, to, callback) {
         if (from.name === to.name) {
             throw new Error('Cannot insert a link between a same point');
         }
@@ -126,11 +133,16 @@ class GraphTool extends Component {
         }
 
         this.setState((prevState, props) => {
-            prevState.links[from.name + '-' + to.name] = this.computeLinkInfos({
+            // Create the link
+            const link = this.computeLinkInfos({
                 from: from.name,
                 to: to.name,
                 color: this.state.defaultLinkColor
             }, prevState.points);
+            prevState.links[from.name + '-' + to.name] = link;
+
+            // Call the callback with the new link
+            callback(link);
 
             this.saveInHistory(prevState);
 

@@ -118,7 +118,9 @@ class GraphEditor extends Component {
         if (this.state.pointSelected === null && this.state.linkSelected === null) {
             const x = e.pageX - this.coordinatesPanel.left - 9;
             const y = e.pageY - this.coordinatesPanel.top - 9;
-            this.props.onAddPoint(x, y);
+            this.props.onAddPoint(x, y, function (point) {
+                this.handleClickPoint(point);
+            }.bind(this));
         } else {
             this.handleEscape();
         }
@@ -133,7 +135,9 @@ class GraphEditor extends Component {
             // A point is already selected
             if (this.state.pointSelected !== point) {
                 try {
-                    this.props.onAddLink(this.state.pointSelected, point);
+                    this.props.onAddLink(this.state.pointSelected, point, function (link) {
+                        this.handleClickLink(link);
+                    }.bind(this));
                     this.handleEscape();
                 } catch (e) {
                     alert(e);
