@@ -12,6 +12,7 @@ class GraphButtons extends Component {
         this.handleNew = this.handleNew.bind(this);
         this.handleCopy = this.handleCopy.bind(this);
         this.handleSavePicture = this.handleSavePicture.bind(this);
+        this.handlePlay = this.handlePlay.bind(this);
     }
 
     /**
@@ -46,9 +47,39 @@ class GraphButtons extends Component {
             });
     }
 
+    /**
+     * Play the graph
+     */
+    handlePlay(e) {
+        e.preventDefault();
+        this.props.onPlay();
+    }
+
+    /**
+     * Is the graph animated
+     * @returns {boolean}
+     */
+    isGraphAnimated() {
+        for (const name of Object.keys(this.props.links)) {
+            let link = this.props.links[name];
+            if('animation' in link && link.animation) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     render() {
         return (
             <section className="graph-buttons">
+                {this.isGraphAnimated() &&
+                <GraphButton onClick={this.handlePlay} className="graph-button-play">
+                    <i className="fa fa-play-circle" aria-hidden="true"></i>
+                    Play
+                </GraphButton>
+                }
+
                 {Object.keys(this.props.points).length > 0 &&
                 <GraphButton onClick={this.handleNew}>
                     <i className="fa fa-file-o" aria-hidden="true"></i>

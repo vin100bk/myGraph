@@ -17,7 +17,7 @@ class GraphToolMenu extends Component {
 
                 <GraphButtons points={this.props.points} links={this.props.links}
                               currentHistoryRow={this.props.currentHistoryRow} onNewGraph={this.props.onNewGraph}
-                              onCopyGraph={this.props.onCopyGraph}/>
+                              onCopyGraph={this.props.onCopyGraph} onPlay={this.props.onPlay}/>
             </section>
         );
     }

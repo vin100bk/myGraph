@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-import './CoordPoint.css';
+import './EditingPoint.css';
 
 import Point from '../Point/Point';
 
-class CoordPoint extends Component {
+class EditingPoint extends Component {
     constructor(props) {
         super(props);
 
@@ -82,4 +82,4 @@ class CoordPoint extends Component {
     }
 }
 
-export default CoordPoint;
+export default EditingPoint;

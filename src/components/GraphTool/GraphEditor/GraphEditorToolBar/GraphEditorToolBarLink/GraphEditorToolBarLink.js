@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import './GraphEditorToolBarLink.css';
 
 import GraphEditorToolBarColor from '../GraphEditorToolBarColor/GraphEditorToolBarColor';
+import GraphEditorToolBarAnimation from '../GraphEditorToolBarAnimation/GraphEditorToolBarAnimation';
 
 class GraphEditorToolBarLink extends Component {
     render() {
@@ -12,6 +13,8 @@ class GraphEditorToolBarLink extends Component {
                                          allColor={this.props.allColor} onUpdate={this.props.onUpdate}
                                          onApplyAll={this.props.onApplyAll}
                                          onUpdateDefaultColor={this.props.onUpdateDefaultColor}/>
+
+                <GraphEditorToolBarAnimation link={this.props.link} onUpdate={this.props.onUpdate} />
             </div>
         );
     }

@@ -16,3 +16,18 @@
     margin-right: 10px;
     background-color: #356;
 }
+
+.graph-button-play {
+    text-align: center;
+    font-size: 1.6rem;
+    margin: 0 20px 20px;
+    background-color: #070;
+}
+
+.graph-button-play:hover {
+    background-color: #050;
+}
+
+.graph-button-play .fa {
+    background-color: inherit;
+}

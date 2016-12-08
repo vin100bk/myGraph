@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import './GraphEditor.css';
 
 import GraphEditorToolBar from './GraphEditorToolBar/GraphEditorToolBar';
-import CoordPoint from '../CoordPoint/CoordPoint';
+import EditingPoint from '../EditingPoint/EditingPoint';
 import Link from '../Link/Link';
 
 
@@ -324,7 +324,7 @@ class GraphEditor extends Component {
         // Points
         for (const name of Object.keys(this.props.points)) {
             let point = this.props.points[name];
-            children.push(<CoordPoint key={name} point={point}
+            children.push(<EditingPoint key={name} point={point}
                                       isSelected={this.state.pointSelected && this.state.pointSelected.name === name}
                                       onClick={this.handleClickPoint}
                                       onMouseOver={this.handleHoverPoint} onMouseOut={this.handleOutPoint}

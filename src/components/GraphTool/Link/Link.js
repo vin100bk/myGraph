@@ -25,6 +25,9 @@ class Link extends Component {
     }
 
     render() {
+        /*
+         * Style
+         */
         const style = {
             top: this.props.link.y + 'px',
             left: this.props.link.x + 'px',
@@ -32,13 +35,28 @@ class Link extends Component {
             width: this.props.link.width + 'px'
         };
 
-        const innerStyle = {
+        let innerStyle = {
             backgroundColor: this.props.link.color
         };
+        if ('animation' in this.props.link && this.props.link.animation) {
+            Object.assign(innerStyle, {
+                transition: 'width ' + this.props.link.animationDuration + 's ' + this.props.link.animationStart + 's'
+            });
+        }
+
+        /*
+         * Classes
+         */
+        let classes = 'graph-line';
+        if (this.props.isSelected) {
+            classes += ' active';
+        }
+        if ('animation' in this.props.link && this.props.link.animation) {
+            classes += ' graph-line-animated';
+        }
 
         return (
-            <div className={this.props.isSelected ? 'graph-line active' : 'graph-line'} style={style}
-                 onClick={this.handleClick}>
+            <div className={classes} style={style} onClick={this.handleClick}>
                 <div className="graph-line-inner" style={innerStyle}/>
             </div>
         );

@@ -6,6 +6,21 @@ import Point from '../Point/Point';
 import Link from '../Link/Link';
 
 class GraphVisualization extends Component {
+    componentDidUpdate(prevProps, prevState) {
+        this.panel.classList.remove('active');
+
+        if (this.timer) {
+            clearTimeout(this.timer);
+        }
+        this.timer = setTimeout(function () {
+            this.panel.classList.add('active');
+        }.bind(this), 0);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timer);
+    }
+
     render() {
         let children = [];
         // Points
@@ -24,7 +39,7 @@ class GraphVisualization extends Component {
             <section id="graph-visualization">
                 <h1>Graph visualization</h1>
 
-                <div id="graph-visualization-panel">
+                <div id="graph-visualization-panel" ref={(panel) => { this.panel = panel; }}>
                     {children}
                 </div>
             </section>

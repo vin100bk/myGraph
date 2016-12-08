@@ -1,7 +1,24 @@
+/*
+ * Form
+ */
+input, textarea {
+    max-width: 100%;
+}
+
+input[type="number"] {
+    width: 50px;
+}
+
 .form-line {
     margin-bottom: 5px;
     height: 20px;
     line-height: 20px;
+    clear: both;
+}
+
+.form-subline {
+    margin-left: 20px;
+    font-size: 0.8rem;
 }
 
 .form-line label {
@@ -20,4 +37,59 @@
 
 .form-field > *:last-child {
     margin-right: 0;
+}
+
+/*
+ * Toggle
+ */
+.toggle-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.toggle-wrapper input {
+    display: none;
+}
+
+/* The slider */
+.toggle {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 20px;
+}
+
+.toggle:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.toggle-wrapper input:checked + .toggle {
+    background-color: #2196F3;
+}
+
+.toggle-wrapper input:focus + .toggle {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+.toggle-wrapper input:checked + .toggle:before {
+    -webkit-transform: translateX(16px);
+    -ms-transform: translateX(16px);
+    transform: translateX(16px);
 }

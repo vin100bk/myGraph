@@ -16,3 +16,19 @@
     height: 100%;
     position: relative;
 }
+
+/*
+ * Animations
+ */
+
+#graph-visualization-panel:not(.active) .graph-line-inner {
+    transition: none !important;
+}
+
+#graph-visualization-panel .graph-line-animated .graph-line-inner {
+    width: 0 !important;
+}
+
+#graph-visualization-panel.active .graph-line-animated .graph-line-inner {
+    width: 100% !important;
+}

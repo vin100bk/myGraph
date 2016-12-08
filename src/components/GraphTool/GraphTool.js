@@ -27,6 +27,7 @@ class GraphTool extends Component {
         this.handleEmptyHistory = this.handleEmptyHistory.bind(this);
         this.handleUpdateDefaultPointColor = this.handleUpdateDefaultPointColor.bind(this);
         this.handleUpdateDefaultLinkColor = this.handleUpdateDefaultLinkColor.bind(this);
+        this.handlePlay = this.handlePlay.bind(this);
 
         let hist = localStorage.getItem('history');
         if (hist) {
@@ -197,8 +198,8 @@ class GraphTool extends Component {
      */
     handleCopyGraph() {
         this.setState((prevState, props) => {
-            prevState.points = (JSON.parse(JSON.stringify(prevState.points)));
-            prevState.links = (JSON.parse(JSON.stringify(prevState.links)));
+            prevState.points = Object.assign({}, prevState.points);
+            prevState.links = Object.assign({}, prevState.links);
             prevState.currentHistoryName = null;
 
             this.saveInHistory(prevState);
@@ -319,6 +320,13 @@ class GraphTool extends Component {
     }
 
     /**
+     * Play the animations
+     */
+    handlePlay() {
+        this.graphVisualization.forceUpdate();
+    }
+
+    /**
      * Save the current graph in history
      * @param state
      */
@@ -412,7 +420,7 @@ class GraphTool extends Component {
                                onClickHistoryRow={this.handleLoadHistory}
                                onRenameHistoryRow={this.handleRenameHistory}
                                onDeleteHistoryRow={this.handleDeleteHistory}
-                               onEmptyHistory={this.handleEmptyHistory}/>
+                               onEmptyHistory={this.handleEmptyHistory} onPlay={this.handlePlay}/>
 
                 <GraphEditor onAddPoint={this.handleAddPoint} onDeletePoint={this.handleDeletePoint}
                              onUpdatePoint={this.handleUpdatePoint} onAddLink={this.handleAddLink}
@@ -423,7 +431,8 @@ class GraphTool extends Component {
                              onUpdateDefaultPointColor={this.handleUpdateDefaultPointColor}
                              onUpdateDefaultLinkColor={this.handleUpdateDefaultLinkColor}/>
 
-                <GraphVisualization points={this.state.points} links={this.state.links}/>
+                <GraphVisualization points={this.state.points} links={this.state.links}
+                                    ref={(graphViz) => { this.graphVisualization = graphViz; }}/>
             </section>
         );
     }
