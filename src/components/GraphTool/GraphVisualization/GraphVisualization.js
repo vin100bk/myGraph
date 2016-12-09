@@ -7,18 +7,34 @@ import Link from '../Link/Link';
 
 class GraphVisualization extends Component {
     componentDidUpdate(prevProps, prevState) {
-        this.panel.classList.remove('active');
-
-        if (this.timer) {
-            clearTimeout(this.timer);
-        }
-        this.timer = setTimeout(function () {
-            this.panel.classList.add('active');
-        }.bind(this), 0);
+        this.play();
     }
 
     componentWillUnmount() {
-        clearInterval(this.timer);
+        this.clearTimer();
+    }
+
+    /**
+     * Clear the timer
+     */
+    clearTimer() {
+        if (this.timer) {
+            clearTimeout(this.timer);
+        }
+    }
+
+    /**
+     * Play the animations
+     */
+    play() {
+        if (this.timer) {
+            clearTimeout(this.timer);
+        }
+
+        this.panel.classList.remove('active');
+        this.timer = setTimeout(function () {
+            this.panel.classList.add('active');
+        }.bind(this), 0);
     }
 
     render() {

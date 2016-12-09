@@ -323,7 +323,7 @@ class GraphTool extends Component {
      * Play the animations
      */
     handlePlay() {
-        this.graphVisualization.forceUpdate();
+        this.graphVisualization.play();
     }
 
     /**
