@@ -37,6 +37,12 @@ class GraphButtons extends Component {
      */
     handleSavePicture(e) {
         e.preventDefault();
+
+        if (this.isGraphAnimated()) {
+            // If the graph is animated, notify the user that animations are ignored in the picture
+            alert('This graph contains some animations, these ones are ignored in the picture. We are not able to save animated picture so far');
+        }
+
         Domtoimage.toSvg(document.getElementById('graph-visualization-panel'))
             .then(function (imgContent) {
                 let link = document.createElement('a');
@@ -62,7 +68,7 @@ class GraphButtons extends Component {
     isGraphAnimated() {
         for (const name of Object.keys(this.props.links)) {
             let link = this.props.links[name];
-            if('animation' in link && link.animation) {
+            if ('animation' in link && link.animation) {
                 return true;
             }
         }
