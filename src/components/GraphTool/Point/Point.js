@@ -47,7 +47,7 @@ class Point extends Component {
         return (
             <div className={this.props.isSelected ? 'graph-dot active' : 'graph-dot'} style={style} draggable="true"
                  onClick={this.handleClick} onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut}
-                 onDragStart={this.handleDragStart}><span style={spanStyle}/></div>
+                 onDragStart={this.handleDragStart}><span style={spanStyle} className="graph-dot-inner"/></div>
         );
     }
 }

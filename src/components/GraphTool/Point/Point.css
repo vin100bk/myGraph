@@ -12,7 +12,7 @@
     transform: scale(0.5);*/
 }
 
-.graph-dot span {
+.graph-dot .graph-dot-inner {
     border-radius: 50%;
     content: "";
     width: 8px;
@@ -21,6 +21,12 @@
     position: absolute;
     top: 50%;
     left: 50%;
+}
+
+.graph-dot .graph-dot-name {
+    position: absolute;
+    top: -5px;
+    left: -5px;
 }
 
 /*
@@ -38,14 +44,14 @@
     cursor: move;
 }
 
-#graph-editor-panel .graph-dot:hover span {
+#graph-editor-panel .graph-dot:hover .graph-dot-inner {
     filter: brightness(85%);
     width: 10px;
     height: 10px;
     margin: -5px 0 0 -5px;
 }
 
-#graph-editor-panel .graph-dot.active span {
+#graph-editor-panel .graph-dot.active .graph-dot-inner {
     filter: brightness(65%);
     width: 10px;
     height: 10px;

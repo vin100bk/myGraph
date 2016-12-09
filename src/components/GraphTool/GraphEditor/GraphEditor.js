@@ -286,7 +286,7 @@ class GraphEditor extends Component {
      * @param props
      */
     updateLink(link, props) {
-        let l = Object.assign({}, link, props);
+        let l = Object.assign(link, props);
         this.props.onUpdateLink(l);
     }
 

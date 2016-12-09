@@ -27,9 +27,7 @@ class GraphVisualization extends Component {
      * Play the animations
      */
     play() {
-        if (this.timer) {
-            clearTimeout(this.timer);
-        }
+        this.clearTimer();
 
         this.panel.classList.remove('active');
         this.timer = setTimeout(function () {
