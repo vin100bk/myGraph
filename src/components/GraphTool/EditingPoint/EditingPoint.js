@@ -67,7 +67,10 @@ class EditingPoint extends Component {
 
         return (
             <div>
-                <Point point={this.props.point} isSelected={this.props.isSelected} onClick={this.props.onClick}
+                <Point point={this.props.point}
+                       isSelected={this.props.isSelected}
+                       draggable="true"
+                       onClick={this.props.onClick}
                        onMouseOver={this.handleHoverPoint} onMouseOut={this.handleOutPoint}
                        onDragStart={this.handleDragStart}/>
 

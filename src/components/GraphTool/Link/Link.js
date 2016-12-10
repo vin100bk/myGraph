@@ -38,7 +38,7 @@ class Link extends Component {
         let innerStyle = {
             backgroundColor: this.props.link.color
         };
-        if ('animation' in this.props.link && this.props.link.animation) {
+        if (this.props.link.animation) {
             Object.assign(innerStyle, {
                 transition: 'width ' + this.props.link.animationDuration + 's ' + this.props.link.animationStart + 's'
             });
@@ -51,7 +51,7 @@ class Link extends Component {
         if (this.props.isSelected) {
             classes += ' active';
         }
-        if ('animation' in this.props.link && this.props.link.animation) {
+        if (this.props.link.animation) {
             classes += ' graph-line-animated';
         }
 

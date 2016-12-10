@@ -14,7 +14,7 @@ class GraphEditorToolBarLink extends Component {
                                          onApplyAll={this.props.onApplyAll}
                                          onUpdateDefaultColor={this.props.onUpdateDefaultColor}/>
 
-                <GraphEditorToolBarAnimation link={this.props.link} onUpdate={this.props.onUpdate} />
+                <GraphEditorToolBarAnimation entity={this.props.link} onUpdate={this.props.onUpdate} />
             </div>
         );
     }

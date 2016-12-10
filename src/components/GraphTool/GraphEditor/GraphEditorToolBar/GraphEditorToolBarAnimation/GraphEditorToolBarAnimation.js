@@ -7,9 +7,9 @@ class GraphEditorToolBarAnimation extends Component {
         super(props);
 
         this.state = {
-            toggle: (this.props.link.animation) ? this.props.link.animation : false,
-            start: (this.props.link.animationStart) ? this.props.link.animationStart : 0,
-            duration: (this.props.link.animationDuration) ? this.props.link.animationDuration : 1
+            toggle: (this.props.entity.animation) ? this.props.entity.animation : false,
+            start: (this.props.entity.animationStart) ? this.props.entity.animationStart : 0,
+            duration: (this.props.entity.animationDuration) ? this.props.entity.animationDuration : 1
         };
 
         this.handleToggleChange = this.handleToggleChange.bind(this);

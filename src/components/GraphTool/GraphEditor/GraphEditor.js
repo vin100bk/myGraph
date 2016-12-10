@@ -319,40 +319,23 @@ class GraphEditor extends Component {
     }
 
     render() {
-        let allPointsColor;
         let children = [];
         // Points
         for (const name of Object.keys(this.props.points)) {
             let point = this.props.points[name];
             children.push(<EditingPoint key={name} point={point}
-                                      isSelected={this.state.pointSelected && this.state.pointSelected.name === name}
-                                      onClick={this.handleClickPoint}
-                                      onMouseOver={this.handleHoverPoint} onMouseOut={this.handleOutPoint}
-                                      onDragStart={this.handleDragStart}/>);
-
-            // Store the color of all points (if all points have the same color, null otherwise)
-            if (typeof allPointsColor === 'undefined') {
-                allPointsColor = point.color;
-            } else if (allPointsColor !== point.color) {
-                allPointsColor = null;
-            }
-
+                                        isSelected={this.state.pointSelected && this.state.pointSelected.name === name}
+                                        onClick={this.handleClickPoint}
+                                        onMouseOver={this.handleHoverPoint} onMouseOut={this.handleOutPoint}
+                                        onDragStart={this.handleDragStart}/>);
         }
 
         // Links
-        let allLinksColor;
         for (const name of Object.keys(this.props.links)) {
             let link = this.props.links[name];
             children.push(<Link key={name} link={link}
                                 isSelected={this.state.linkSelected && this.state.linkSelected.name === name}
                                 onClick={this.handleClickLink}/>);
-
-            // Store the color of all links (if all links have the same color, null otherwise)
-            if (typeof allLinksColor === 'undefined') {
-                allLinksColor = link.color;
-            } else if (allLinksColor !== link.color) {
-                allLinksColor = null;
-            }
         }
 
         let panelClass = '';
@@ -365,10 +348,10 @@ class GraphEditor extends Component {
         return (
             <section id="graph-editor">
                 {(this.state.pointSelected || this.state.linkSelected) &&
-                <GraphEditorToolBar point={this.state.pointSelected} link={this.state.linkSelected}
+                <GraphEditorToolBar points={this.props.points} links={this.props.links} point={this.state.pointSelected}
+                                    link={this.state.linkSelected}
                                     defaultPointColor={this.props.defaultPointColor}
-                                    defaultLinkColor={this.props.defaultLinkColor} allPointsColor={allPointsColor}
-                                    allLinksColor={allLinksColor}
+                                    defaultLinkColor={this.props.defaultLinkColor}
                                     onUpdatePoint={this.handleUpdatePoint} onUpdateLink={this.handleUpdateLink}
                                     onApplyAllPoints={this.handleApplyAllPoints}
                                     onApplyAllLinks={this.handleApplyAllLinks}

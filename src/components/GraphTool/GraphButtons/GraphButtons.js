@@ -68,7 +68,14 @@ class GraphButtons extends Component {
     isGraphAnimated() {
         for (const name of Object.keys(this.props.links)) {
             let link = this.props.links[name];
-            if ('animation' in link && link.animation) {
+            if (link.animation) {
+                return true;
+            }
+        }
+
+        for (const name of Object.keys(this.props.points)) {
+            let point = this.props.points[name];
+            if (point.animation) {
                 return true;
             }
         }

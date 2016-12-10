@@ -21,14 +21,26 @@
  * Animations
  */
 
-#graph-visualization-panel:not(.active) .graph-line-inner {
+#graph-visualization-panel:not(.active) .graph-line-inner, #graph-visualization-panel:not(.active) .graph-dot {
     transition: none !important;
 }
 
+/* Links */
 #graph-visualization-panel .graph-line-animated .graph-line-inner {
     width: 0;
 }
 
 #graph-visualization-panel.active .graph-line-animated .graph-line-inner {
     width: 100%;
+}
+
+/* Points */
+#graph-visualization-panel .graph-dot-animated {
+    opacity: 0;
+    transform: scale(0.5);
+}
+
+#graph-visualization-panel.active .graph-dot-animated {
+    opacity: 1;
+    transform: scale(1);
 }

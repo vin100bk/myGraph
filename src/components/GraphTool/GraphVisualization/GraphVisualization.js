@@ -40,7 +40,7 @@ class GraphVisualization extends Component {
         // Points
         for (const name of Object.keys(this.props.points)) {
             let point = this.props.points[name];
-            children.push(<Point key={name} point={point}/>);
+            children.push(<Point key={name} point={point} draggable="false"/>);
         }
 
         // Links

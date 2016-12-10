@@ -35,7 +35,7 @@ class Point extends Component {
     }
 
     render() {
-        const style = {
+        let style = {
             top: this.props.point.y + 'px',
             left: this.props.point.x + 'px',
         };
@@ -44,8 +44,28 @@ class Point extends Component {
             backgroundColor: this.props.point.color
         };
 
+        /*
+         * Style
+         */
+        if (this.props.point.animation) {
+            Object.assign(style, {
+                transition: 'opacity ' + this.props.point.animationDuration + 's ' + this.props.point.animationStart + 's, transform ' + this.props.point.animationDuration + 's ' + this.props.point.animationStart + 's'
+            });
+        }
+
+        /*
+         * Classes
+         */
+        let classes = 'graph-dot';
+        if (this.props.isSelected) {
+            classes += ' active';
+        }
+        if (this.props.point.animation) {
+            classes += ' graph-dot-animated';
+        }
+
         return (
-            <div className={this.props.isSelected ? 'graph-dot active' : 'graph-dot'} style={style} draggable="true"
+            <div className={classes} style={style} draggable={this.props.draggable}
                  onClick={this.handleClick} onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut}
                  onDragStart={this.handleDragStart}><span style={spanStyle} className="graph-dot-inner"/></div>
         );
