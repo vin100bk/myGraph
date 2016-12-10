@@ -19,6 +19,26 @@ class GraphEditorToolBarAnimation extends Component {
     }
 
     /**
+     * Get the default state
+     * @param props
+     * @returns {{color: *, colorValid: *}}
+     */
+    getDefaultState(props) {
+        return {
+            toggle: (props.entity.animation) ? props.entity.animation : false,
+            start: (props.entity.animationStart) ? props.entity.animationStart : 0,
+            duration: (props.entity.animationDuration) ? props.entity.animationDuration : 1
+        };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if(this.props.entity.name !== nextProps.entity.name) {
+            // The entity changed
+            this.setState(this.getDefaultState(nextProps));
+        }
+    }
+
+    /**
      * When the toggle changes
      * @param e
      */

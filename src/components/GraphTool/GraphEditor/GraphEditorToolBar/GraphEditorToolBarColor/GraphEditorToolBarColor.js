@@ -6,13 +6,29 @@ class GraphEditorToolBarColor extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {color: this.props.entity.color, colorValid: this.props.entity.color};
+        this.state = this.getDefaultState(this.props);
 
         this.handleChange = this.handleChange.bind(this);
         this.handleBlur = this.handleBlur.bind(this);
         this.handleResetDefaultColor = this.handleResetDefaultColor.bind(this);
         this.handleApplyAll = this.handleApplyAll.bind(this);
         this.handleUseDefaultColor = this.handleUseDefaultColor.bind(this);
+    }
+
+    /**
+     * Get the default state
+     * @param props
+     * @returns {{color: *, colorValid: *}}
+     */
+    getDefaultState(props) {
+        return {color: props.entity.color, colorValid: props.entity.color};
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if(this.props.entity.name !== nextProps.entity.name) {
+            // The entity changed
+            this.setState(this.getDefaultState(nextProps));
+        }
     }
 
     /**
