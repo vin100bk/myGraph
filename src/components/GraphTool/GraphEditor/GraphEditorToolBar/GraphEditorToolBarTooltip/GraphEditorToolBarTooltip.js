@@ -118,11 +118,13 @@ class GraphEditorToolBarTooltip extends Component {
         return (
             <div className="graph-editor-toolbar-content">
                 <InputColor color={this.props.tooltip.color}
+                            defaultColor={this.props.defaultColor}
                             onStartTyping={this.handleStartTypingColor}
                             onStopTyping={this.handleStopTypingColor}
                             onUpdate={this.handleUpdateColor}/>
 
                 <InputColor color={this.props.tooltip.fontColor}
+                            defaultColor={this.props.defaultFontColor}
                             label="Font color"
                             onStartTyping={this.handleStartTypingFontColor}
                             onStopTyping={this.handleStopTypingFontColor}
