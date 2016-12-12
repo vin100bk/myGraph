@@ -37,7 +37,12 @@ let links = {
     '9-10': {name: '9-10', from: '9', to: '10', color: '#ff9999', animation: true, animationStart: 6, animationDuration: 1}
 };
 
+let tooltips = {
+    't1': {name: 't1', x: 456, y: 85, text: 'First step', color: '#000000', fontColor: '#ffffff', animation: true, animationStart: 2, animationDuration: 1},
+    't2': {name: 't2', x: 878, y: 192, text: 'Final step', color: '#000000', fontColor: '#ffffff', animation: true, animationStart: 6, animationDuration: 1},
+};
+
 ReactDOM.render(
-    <GraphTool points={points} links={links}/>,
+    <GraphTool points={points} links={links} tooltips={tooltips}/>,
     document.getElementById('root')
 );

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import './GraphEditorToolBarColor.css';
+import './InputColor.css';
 
-class GraphEditorToolBarColor extends Component {
+class InputColor extends Component {
     constructor(props) {
         super(props);
 
@@ -11,22 +11,20 @@ class GraphEditorToolBarColor extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleBlur = this.handleBlur.bind(this);
         this.handleResetDefaultColor = this.handleResetDefaultColor.bind(this);
-        this.handleApplyAll = this.handleApplyAll.bind(this);
-        this.handleUseDefaultColor = this.handleUseDefaultColor.bind(this);
     }
 
     /**
      * Get the default state
      * @param props
-     * @returns {{color: *, colorValid: *}}
+     * @returns {{colorTmp: *}}
      */
     getDefaultState(props) {
-        return {color: props.entity.color, colorValid: props.entity.color};
+        return {color: props.color, colorValid: props.color};
     }
 
     componentWillReceiveProps(nextProps) {
-        if(this.props.entity.name !== nextProps.entity.name) {
-            // The entity changed
+        if (this.props.color !== nextProps.color) {
+            // The color changed
             this.setState(this.getDefaultState(nextProps));
         }
     }
@@ -42,6 +40,7 @@ class GraphEditorToolBarColor extends Component {
                 prevState.color = value;
                 return prevState;
             });
+            this.onStartTyping(value);
         }
 
         if (this.isColorValid(value)) {
@@ -49,7 +48,7 @@ class GraphEditorToolBarColor extends Component {
                 prevState.colorValid = value;
                 return prevState;
             });
-            this.props.onUpdate({color: value});
+            this.onUpdate(value);
         }
     }
 
@@ -58,11 +57,13 @@ class GraphEditorToolBarColor extends Component {
      * @param e
      */
     handleBlur(e) {
-        if (this.state.color !== this.state.colorValid) {
+        const value = e.target.value.toLowerCase();
+        if (!this.isColorValid(value)) {
             this.setState((prevState, props) => {
                 prevState.color = prevState.colorValid;
                 return prevState;
             });
+            this.onStopTyping(value);
         }
     }
 
@@ -72,25 +73,7 @@ class GraphEditorToolBarColor extends Component {
      */
     handleResetDefaultColor(e) {
         this.setState({color: this.props.defaultColor, colorValid: this.props.defaultColor});
-        this.props.onUpdate({color: this.props.defaultColor});
-    }
-
-    /**
-     * Apply this color for all the points
-     * @param e
-     */
-    handleApplyAll(e) {
-        e.preventDefault();
-        this.props.onApplyAll({color: this.state.color});
-    }
-
-    /**
-     * Use this color as default
-     * @param e
-     */
-    handleUseDefaultColor(e) {
-        e.preventDefault();
-        this.props.onUpdateDefaultColor(this.state.color);
+        this.onUpdate(this.props.defaultColor);
     }
 
     /**
@@ -111,6 +94,37 @@ class GraphEditorToolBarColor extends Component {
         return regex.test(color);
     }
 
+    /**
+     * Notify the change
+     * @param value
+     */
+    onUpdate(value) {
+        if (this.props.onUpdate) {
+            this.props.onUpdate(value);
+        }
+        this.onStopTyping(value);
+    }
+
+    /**
+     * Notify start typing
+     * @param value
+     */
+    onStartTyping(value) {
+        if (this.props.onStartTyping) {
+            this.props.onStartTyping(value);
+        }
+    }
+
+    /**
+     * Notify stop typing
+     * @param value
+     */
+    onStopTyping(value) {
+        if (this.props.onStopTyping) {
+            this.props.onStopTyping(value);
+        }
+    }
+
     render() {
         const style = {
             backgroundColor: this.state.colorValid
@@ -121,35 +135,27 @@ class GraphEditorToolBarColor extends Component {
         };
 
         return (
-            <div>
-                <div className="form-line">
-                    <label>Color</label>
+            <div className="form-line">
+                <label>{this.props.label}</label>
                     <span className="form-field">
                         <span className="preview-color" style={style}/>
 
                         <input type="text" onChange={this.handleChange} onBlur={this.handleBlur}
                                value={this.state.color} style={styleInput}
-                               className="graph-editor-toolbar-color-input"/>
+                               className="input-color"/>
 
-                        {this.state.color !== this.props.defaultColor &&
+                        {this.props.defaultColor && this.state.color !== this.props.defaultColor &&
                         <i className="fa fa-history icon" aria-hidden="true" title="Use the default color"
                            onClick={this.handleResetDefaultColor}></i>
                         }
                     </span>
-                </div>
-
-                {this.state.colorValid === this.state.color && this.props.allColor !== this.state.color &&
-                <p className="graph-editor-toolbar-link"><a href="#" onClick={this.handleApplyAll}>Apply all</a></p>
-                }
-
-                {this.state.colorValid === this.state.color && this.props.defaultColor !== this.state.color &&
-                <p className="graph-editor-toolbar-link"><a href="#" onClick={this.handleUseDefaultColor}>Use this color
-                    as
-                    default</a></p>
-                }
             </div>
         );
     }
 }
 
-export default GraphEditorToolBarColor;
+InputColor.defaultProps = {
+    label: 'Color'
+};
+
+export default InputColor;

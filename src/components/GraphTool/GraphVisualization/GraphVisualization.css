@@ -21,7 +21,7 @@
  * Animations
  */
 
-#graph-visualization-panel:not(.active) .graph-line-inner, #graph-visualization-panel:not(.active) .graph-dot {
+#graph-visualization-panel:not(.active) .graph-line-inner, #graph-visualization-panel:not(.active) .graph-dot, #graph-visualization-panel:not(.active) .graph-tooltip {
     transition: none !important;
 }
 
@@ -43,4 +43,15 @@
 #graph-visualization-panel.active .graph-dot-animated {
     opacity: 1;
     transform: scale(1);
+}
+
+/* Tooltips */
+#graph-visualization-panel .graph-tooltip-animated {
+    opacity: 0;
+    margin-top: -30px;
+}
+
+#graph-visualization-panel.active .graph-tooltip-animated {
+    opacity: 1;
+    margin-top: 0;
 }

@@ -22,6 +22,6 @@
     cursor: crosshair;
 }
 
-#graph-editor-panel.point-selected, #graph-editor-panel.link-selected {
+#graph-editor-panel.point-selected, #graph-editor-panel.link-selected, #graph-editor-panel.tooltip-selected {
     cursor: not-allowed;
 }

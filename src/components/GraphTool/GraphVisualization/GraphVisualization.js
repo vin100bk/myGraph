@@ -4,6 +4,7 @@ import './GraphVisualization.css';
 
 import Point from '../Point/Point';
 import Link from '../Link/Link';
+import Tooltip from '../Tooltip/Tooltip';
 
 class GraphVisualization extends Component {
     componentDidUpdate(prevProps, prevState) {
@@ -47,6 +48,12 @@ class GraphVisualization extends Component {
         for (const name of Object.keys(this.props.links)) {
             let link = this.props.links[name];
             children.push(<Link key={name} link={link}/>);
+        }
+
+        // Links
+        for (const name of Object.keys(this.props.tooltips)) {
+            let tooltip = this.props.tooltips[name];
+            children.push(<Tooltip key={name} tooltip={tooltip}/>);
         }
 
         return (

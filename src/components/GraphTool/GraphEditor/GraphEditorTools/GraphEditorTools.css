@@ -1,0 +1,33 @@
+#graph-editor-tools {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 50px;
+    z-index: 20;
+    border: 1px solid #356;
+    background-color: #fff;
+}
+
+#graph-editor-tools ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 5px 0;
+}
+
+#graph-editor-tools ul li {
+    text-align: center;
+    padding: 5px 0;
+    cursor: pointer;
+}
+
+#graph-editor-tools ul li:hover {
+    background-color: #555;
+    color: #fff;
+}
+
+#graph-editor-tools ul li.selected {
+    background-color: #000;
+    color: #fff;
+    cursor: default;
+}
+

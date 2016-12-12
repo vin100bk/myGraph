@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 
-import './GraphEditorToolBarAnimation.css';
+import './ToggleAnimation.css';
 
-class GraphEditorToolBarAnimation extends Component {
+class ToggleAnimation extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            toggle: (this.props.entity.animation) ? this.props.entity.animation : false,
-            start: (this.props.entity.animationStart) ? this.props.entity.animationStart : 0,
-            duration: (this.props.entity.animationDuration) ? this.props.entity.animationDuration : 1
+            toggle: (this.props.isAnimation) ? this.props.isAnimation : false,
+            start: (this.props.animationStart) ? this.props.animationStart : 0,
+            duration: (this.props.animationDuration) ? this.props.animationDuration : 1
         };
 
         this.handleToggleChange = this.handleToggleChange.bind(this);
@@ -21,19 +21,18 @@ class GraphEditorToolBarAnimation extends Component {
     /**
      * Get the default state
      * @param props
-     * @returns {{color: *, colorValid: *}}
+     * @returns {{toggle: *, start: *, duration: *}}
      */
     getDefaultState(props) {
         return {
-            toggle: (props.entity.animation) ? props.entity.animation : false,
-            start: (props.entity.animationStart) ? props.entity.animationStart : 0,
-            duration: (props.entity.animationDuration) ? props.entity.animationDuration : 1
+            toggle: (props.isAnimation) ? props.isAnimation : false,
+            start: (props.animationStart) ? props.animationStart : 0,
+            duration: (props.animationDuration) ? props.animationDuration : 1
         };
     }
 
     componentWillReceiveProps(nextProps) {
-        if(this.props.entity.name !== nextProps.entity.name) {
-            // The entity changed
+        if (this.props !== nextProps) {
             this.setState(this.getDefaultState(nextProps));
         }
     }
@@ -113,11 +112,13 @@ class GraphEditorToolBarAnimation extends Component {
      * @param state the current state
      */
     notifyChange(state) {
-        this.props.onUpdate({
-            animation: state.toggle,
-            animationStart: state.start,
-            animationDuration: state.duration
-        });
+        if (this.props.onUpdate) {
+            this.props.onUpdate({
+                animation: state.toggle,
+                animationStart: state.start,
+                animationDuration: state.duration
+            });
+        }
     }
 
     render() {
@@ -161,4 +162,4 @@ class GraphEditorToolBarAnimation extends Component {
     }
 }
 
-export default GraphEditorToolBarAnimation;
+export default ToggleAnimation;

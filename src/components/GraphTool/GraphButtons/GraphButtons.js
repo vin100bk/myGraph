@@ -80,7 +80,22 @@ class GraphButtons extends Component {
             }
         }
 
+        for (const name of Object.keys(this.props.tooltips)) {
+            let tooltip = this.props.tooltips[name];
+            if (tooltip.animation) {
+                return true;
+            }
+        }
+
         return false;
+    }
+
+    /**
+     * Is graph empty ?
+     * @returns {boolean}
+     */
+    isGraphEmpty() {
+        return Object.keys(this.props.points).length == 0 && Object.keys(this.props.links).length == 0 && Object.keys(this.props.tooltips).length == 0;
     }
 
     render() {
@@ -93,7 +108,7 @@ class GraphButtons extends Component {
                 </GraphButton>
                 }
 
-                {Object.keys(this.props.points).length > 0 &&
+                {!this.isGraphEmpty() &&
                 <GraphButton onClick={this.handleNew}>
                     <i className="fa fa-file-o" aria-hidden="true"></i>
                     New graph
@@ -107,7 +122,7 @@ class GraphButtons extends Component {
                 </GraphButton>
                 }
 
-                {Object.keys(this.props.points).length > 0 &&
+                {!this.isGraphEmpty() &&
                 <GraphButton onClick={this.handleSavePicture}>
                     <i className="fa fa-file-image-o" aria-hidden="true"></i>
                     Save as picture

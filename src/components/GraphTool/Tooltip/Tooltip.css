@@ -1,0 +1,29 @@
+.graph-tooltip {
+    border-radius: 2px;
+    display: inline-block;
+    letter-spacing: .8px;
+    padding: 5px;
+    position: absolute;
+    z-index: 11;
+    font-size: 0.9rem;
+}
+
+/*
+ * Hover Tooltips
+ */
+#graph-editor-panel .graph-tooltip:hover {
+    cursor: pointer;
+}
+
+#graph-editor-panel.tooltip-selected .graph-tooltip.active:hover {
+    cursor: move;
+}
+
+#graph-editor-panel .graph-tooltip:hover {
+    filter: brightness(85%);
+}
+
+#graph-editor-panel .graph-tooltip.active {
+    filter: brightness(65%);
+    font-style: italic;
+}

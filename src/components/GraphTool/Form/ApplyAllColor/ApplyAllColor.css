@@ -1,0 +1,10 @@
+.apply-all-color-link {
+    margin: 0 0 0px;
+    font-size: 0.8rem;
+    text-align: right;
+    line-height: 15px;
+}
+
+.apply-all-color-link:last-child {
+    margin-bottom: 10px;
+}

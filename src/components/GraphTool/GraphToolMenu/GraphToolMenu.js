@@ -15,7 +15,7 @@ class GraphToolMenu extends Component {
                               onDeleteHistoryRow={this.props.onDeleteHistoryRow}
                               onEmptyHistory={this.props.onEmptyHistory}/>
 
-                <GraphButtons points={this.props.points} links={this.props.links}
+                <GraphButtons points={this.props.points} links={this.props.links} tooltips={this.props.tooltips}
                               currentHistoryRow={this.props.currentHistoryRow} onNewGraph={this.props.onNewGraph}
                               onCopyGraph={this.props.onCopyGraph} onPlay={this.props.onPlay}/>
             </section>

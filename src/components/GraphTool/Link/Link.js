@@ -20,8 +20,10 @@ class Link extends Component {
      * Click on a link
      */
     handleClick(e) {
-        e.stopPropagation();
-        this.props.onClick(this.props.link);
+        if (this.props.onClick) {
+            e.stopPropagation();
+            this.props.onClick(this.props.link);
+        }
     }
 
     render() {

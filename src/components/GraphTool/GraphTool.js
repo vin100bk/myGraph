@@ -19,6 +19,9 @@ class GraphTool extends Component {
         this.handleAddLink = this.handleAddLink.bind(this);
         this.handleDeleteLink = this.handleDeleteLink.bind(this);
         this.handleUpdateLink = this.handleUpdateLink.bind(this);
+        this.handleAddTooltip = this.handleAddTooltip.bind(this);
+        this.handleDeleteTooltip = this.handleDeleteTooltip.bind(this);
+        this.handleUpdateTooltip = this.handleUpdateTooltip.bind(this);
         this.handleNewGraph = this.handleNewGraph.bind(this);
         this.handleCopyGraph = this.handleCopyGraph.bind(this);
         this.handleLoadHistory = this.handleLoadHistory.bind(this);
@@ -27,6 +30,7 @@ class GraphTool extends Component {
         this.handleEmptyHistory = this.handleEmptyHistory.bind(this);
         this.handleUpdateDefaultPointColor = this.handleUpdateDefaultPointColor.bind(this);
         this.handleUpdateDefaultLinkColor = this.handleUpdateDefaultLinkColor.bind(this);
+        this.handleUpdateDefaultTooltipColor = this.handleUpdateDefaultTooltipColor.bind(this);
         this.handlePlay = this.handlePlay.bind(this);
 
         let hist = localStorage.getItem('history');
@@ -37,12 +41,15 @@ class GraphTool extends Component {
         }
 
         this.state = {
-            points: this.props.points,
-            links: this.computeLinksInfos(this.props.links, this.props.points),
+            points: this.props.points ? this.props.points : {},
+            links: this.props.links ? this.computeLinksInfos(this.props.links, this.props.points) : {},
+            tooltips: this.props.tooltips ? this.props.tooltips : {},
             history: hist,
             currentHistoryName: null,
             defaultPointColor: '#79e0ff',
-            defaultLinkColor: '#79e0ff'
+            defaultLinkColor: '#79e0ff',
+            defaultTooltipColor: '#000000',
+            defaultTooltipFontColor: '#ffffff'
         };
     }
 
@@ -182,12 +189,72 @@ class GraphTool extends Component {
     }
 
     /**
+     * Add a tooltip
+     * @param x
+     * @param y
+     * @param callback
+     */
+    handleAddTooltip(x, y, callback) {
+        this.setState((prevState, props) => {
+            // Create the tooltip
+            const name = this.getNextTooltipName(prevState.tooltips);
+            const tooltip = {
+                name: name,
+                x: x,
+                y: y,
+                color: this.state.defaultTooltipColor,
+                fontColor: this.state.defaultTooltipFontColor,
+                text: 'My toolip !'
+            };
+            prevState.tooltips[name] = tooltip;
+
+            // Call the callback with the new tooltip
+            callback(tooltip);
+
+            this.saveInHistory(prevState);
+
+            return prevState;
+        });
+    }
+
+    /**
+     * Delete a tooltip
+     * @param tooltip
+     */
+    handleDeleteTooltip(tooltip) {
+        this.setState((prevState, props) => {
+            // Delete the tooltip
+            delete prevState.tooltips[tooltip.name];
+
+            this.saveInHistory(prevState);
+
+            return prevState;
+        });
+    }
+
+    /**
+     * Update a tooltip
+     * @param tooltip
+     */
+    handleUpdateTooltip(tooltip) {
+        this.setState((prevState, props) => {
+            // Replace the tooltip
+            prevState.tooltips[tooltip.name] = tooltip;
+
+            this.saveInHistory(prevState);
+
+            return prevState;
+        });
+    }
+
+    /**
      * Create a new graph
      */
     handleNewGraph() {
         this.setState((prevState, props) => {
             prevState.points = {};
             prevState.links = {};
+            prevState.tooltips = {};
             prevState.currentHistoryName = null;
             return prevState;
         });
@@ -200,6 +267,7 @@ class GraphTool extends Component {
         this.setState((prevState, props) => {
             prevState.points = Object.assign({}, prevState.points);
             prevState.links = Object.assign({}, prevState.links);
+            prevState.tooltips = Object.assign({}, prevState.tooltips);
             prevState.currentHistoryName = null;
 
             this.saveInHistory(prevState);
@@ -232,9 +300,12 @@ class GraphTool extends Component {
         this.setState((prevState, props) => {
             prevState.points = history.points;
             prevState.links = history.links;
+            prevState.tooltips = history.tooltips;
             prevState.currentHistoryName = history.name;
             prevState.defaultPointColor = history.defaultPointColor;
             prevState.defaultLinkColor = history.defaultLinkColor;
+            prevState.defaultTooltipColor = history.defaultTooltipColor;
+            prevState.defaultTooltipFontColor = history.defaultTooltipFontColor;
             return prevState;
         });
     }
@@ -265,6 +336,7 @@ class GraphTool extends Component {
         this.setState((prevState, props) => {
             prevState.points = {};
             prevState.links = {};
+            prevState.tooltips = {};
             prevState.currentHistoryName = null;
 
             delete prevState.history[name];
@@ -282,6 +354,7 @@ class GraphTool extends Component {
         this.setState((prevState, props) => {
             prevState.points = {};
             prevState.links = {};
+            prevState.tooltips = {};
             prevState.history = {};
             prevState.currentHistoryName = null;
 
@@ -320,6 +393,22 @@ class GraphTool extends Component {
     }
 
     /**
+     * Update the default tooltip point
+     * @param color
+     * @param fontColor
+     */
+    handleUpdateDefaultTooltipColor(color, fontColor) {
+        this.setState((prevState, props) => {
+            prevState.defaultTooltipColor = color;
+            prevState.defaultTooltipFontColor = fontColor;
+
+            this.saveInHistory(prevState);
+
+            return prevState;
+        });
+    }
+
+    /**
      * Play the animations
      */
     handlePlay() {
@@ -344,8 +433,11 @@ class GraphTool extends Component {
             lastModification: Date.now(),
             points: state.points,
             links: state.links,
+            tooltips: state.tooltips,
             defaultPointColor: state.defaultPointColor,
-            defaultLinkColor: state.defaultLinkColor
+            defaultLinkColor: state.defaultLinkColor,
+            defaultTooltipColor: state.defaultTooltipColor,
+            defaultTooltipFontColor: state.defaultTooltipFontColor
         };
 
         this.storeHistory(state.history);
@@ -411,10 +503,25 @@ class GraphTool extends Component {
         }
     }
 
+    /**
+     * Get the next tooltip name (incremental way)
+     * @param tooltips
+     * @returns {*}
+     */
+    getNextTooltipName(tooltips) {
+        if (Object.keys(tooltips).length === 0) {
+            return 't1';
+        } else {
+            const keys = Object.keys(tooltips);
+            return 't' + (parseInt(keys[keys.length - 1].substr(1), 10) + 1).toString();
+        }
+    }
+
     render() {
         return (
             <section id="graph-tool">
-                <GraphToolMenu points={this.state.points} links={this.state.links} history={this.state.history}
+                <GraphToolMenu points={this.state.points} links={this.state.links} tooltips={this.state.tooltips}
+                               history={this.state.history}
                                currentHistoryRow={this.state.currentHistoryName}
                                onNewGraph={this.handleNewGraph} onCopyGraph={this.handleCopyGraph}
                                onClickHistoryRow={this.handleLoadHistory}
@@ -425,13 +532,18 @@ class GraphTool extends Component {
                 <GraphEditor onAddPoint={this.handleAddPoint} onDeletePoint={this.handleDeletePoint}
                              onUpdatePoint={this.handleUpdatePoint} onAddLink={this.handleAddLink}
                              onDeleteLink={this.handleDeleteLink} onUpdateLink={this.handleUpdateLink}
-                             points={this.state.points} links={this.state.links}
+                             onAddTooltip={this.handleAddTooltip} onDeleteTooltip={this.handleDeleteTooltip}
+                             onUpdateTooltip={this.handleUpdateTooltip}
+                             points={this.state.points} links={this.state.links} tooltips={this.state.tooltips}
                              defaultPointColor={this.state.defaultPointColor}
                              defaultLinkColor={this.state.defaultLinkColor}
+                             defaultTooltipColor={this.state.defaultTooltipColor}
+                             defaultTooltipFontColor={this.state.defaultTooltipFontColor}
                              onUpdateDefaultPointColor={this.handleUpdateDefaultPointColor}
-                             onUpdateDefaultLinkColor={this.handleUpdateDefaultLinkColor}/>
+                             onUpdateDefaultLinkColor={this.handleUpdateDefaultLinkColor}
+                             onUpdateDefaultTooltipColor={this.handleUpdateDefaultTooltipColor}/>
 
-                <GraphVisualization points={this.state.points} links={this.state.links}
+                <GraphVisualization points={this.state.points} links={this.state.links} tooltips={this.state.tooltips}
                                     ref={(graphViz) => { this.graphVisualization = graphViz; }}/>
             </section>
         );

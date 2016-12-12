@@ -30,8 +30,10 @@ class Point extends Component {
      * @param e
      */
     handleClick(e) {
-        e.stopPropagation();
-        this.props.onClick(this.props.point);
+        if (this.props.onClick) {
+            e.stopPropagation();
+            this.props.onClick(this.props.point);
+        }
     }
 
     render() {
@@ -65,7 +67,7 @@ class Point extends Component {
         }
 
         return (
-            <div className={classes} style={style} draggable={this.props.draggable}
+            <div className={classes} style={style} draggable={this.props.draggable && this.props.isSelected}
                  onClick={this.handleClick} onMouseOver={this.props.onMouseOver} onMouseOut={this.props.onMouseOut}
                  onDragStart={this.handleDragStart}><span style={spanStyle} className="graph-dot-inner"/></div>
         );
