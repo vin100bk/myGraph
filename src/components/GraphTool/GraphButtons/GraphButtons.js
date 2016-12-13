@@ -95,7 +95,7 @@ class GraphButtons extends Component {
      * @returns {boolean}
      */
     isGraphEmpty() {
-        return Object.keys(this.props.points).length == 0 && Object.keys(this.props.links).length == 0 && Object.keys(this.props.tooltips).length == 0;
+        return Object.keys(this.props.points).length === 0 && Object.keys(this.props.links).length === 0 && Object.keys(this.props.tooltips).length === 0;
     }
 
     render() {
