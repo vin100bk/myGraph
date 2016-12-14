@@ -298,6 +298,10 @@ class GraphEditor extends Component {
                 point.x = e.pageX - this.coordinatesPanel.left - 9;
                 point.y = e.pageY - this.coordinatesPanel.top - 9;
                 this.props.onUpdatePoint(point);
+                this.setState((prevState, props) => {
+                    prevState.pointSelected = point;
+                    return prevState;
+                });
 
                 // Disable the coordinate links, related to the CoordPoint component but I did not find any solution
                 let lines = document.getElementsByClassName('graph-dot-coordinates');
@@ -316,6 +320,10 @@ class GraphEditor extends Component {
                 tooltip.y = e.pageY - this.coordinatesPanel.top + (tooltip.y - (mouse.y - this.coordinatesPanel.top));
 
                 this.props.onUpdateTooltip(tooltip);
+                this.setState((prevState, props) => {
+                    prevState.tooltipSelected = tooltip;
+                    return prevState;
+                });
             }
         }
     }
